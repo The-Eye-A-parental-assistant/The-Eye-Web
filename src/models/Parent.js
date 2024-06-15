@@ -1,11 +1,12 @@
 import User from './User';
 
 class Parent extends User{
-    constructor(id,gender,name,imageURL,plan,children,transactions){
+    constructor(id,gender,name,imageURL,plan,children,transactions, PIN){
         super(id,"parent",gender,name,imageURL);
         this.transactions=transactions; 
         this.children=children;
         this.plan=plan;
+        this.PIN=PIN;
 }
 
 
@@ -21,7 +22,8 @@ static fromFirestore(doc) {
         "",
         [],
         // data.videos
-        []
+        [],
+        0
     );
   }
 

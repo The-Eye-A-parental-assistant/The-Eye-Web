@@ -3,6 +3,7 @@ import Menu from './components/Menu';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Video from './pages/Video';
+import AuthPage from './pages/Auth'
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -41,6 +42,7 @@ function App() {
                 <Route path=":id" element={<Video/>}/>
               </Route>
             </Route>
+            <Route path="/auth/" element={<AuthPage/>} />
           </Routes>
 
           

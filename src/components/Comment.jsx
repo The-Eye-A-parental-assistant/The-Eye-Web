@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import Profilepic from '../img/Profilepic.jpg';
 import {Single_user_fetch} from '../utils/Single_user_fetch';
 import HistoryGenerator from '../utils/HistoryGenerator';
 
