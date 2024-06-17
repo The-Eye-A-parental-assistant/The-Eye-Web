@@ -1,7 +1,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Profilepic from '../img/FerdiCildiz.png';
 
 
 import SearchIcon from '@mui/icons-material/Search';

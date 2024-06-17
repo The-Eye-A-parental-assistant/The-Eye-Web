@@ -3,7 +3,7 @@ import User from './User';
 class Child extends User{
     constructor(id,gender,name,imageURL,
                 parentID, PIN, birthDate,
-                history, likes, favourites, 
+                history, likes, dislikes, favourites, 
                 prefs, screenTime){
         super(id,"child",gender,name,imageURL);
         this.parentID=parentID; 
@@ -11,6 +11,7 @@ class Child extends User{
         this.birthDate=birthDate;
         this.history=history;
         this.likes=likes;
+        this.dislikes=dislikes;
         this.favourites=favourites;
         this.prefs=prefs;
         this.screenTime=screenTime;
@@ -28,6 +29,7 @@ static fromFirestore(doc) {
         "",
         "", 
         "",
+        [],
         [],
         [],
         [],
