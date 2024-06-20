@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import Menu from '../components/Menu';
 
 import Navbar from '../components/Navbar';
+import Cookies from 'js-cookie';
+import Child from "../models/Child";
 
 import SendIcon from '@mui/icons-material/Send';
 
@@ -151,7 +153,7 @@ const Video = () => {
   
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState([]);
-
+  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [creator, setCreator] = useState([]);
 
   const [thumbUpClicked, setThumbUpClicked] = useState(false);
@@ -164,11 +166,11 @@ const Video = () => {
 
   useEffect(() => {
     Single_video_fetch(id,setVideo,setCreator)
+    .then((video) => {
+      console.log(video);
+      video_fetch(setVideos, video.tags, video.videoURL)
+    })
   }, [id]);
-  
-  useEffect(() => {
-    video_fetch(videos,setVideos)
-  }, []);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -212,16 +214,6 @@ const Video = () => {
       Your browser does not support the video tag.
     </video>
 
-      {/* <iframe
-            width="100%"
-            height="520"
-            src={video.videoURL}
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe> */}
-      
       </VideoWrapper>
       <Title>{video.title}</Title>
       <Details>

@@ -37,22 +37,19 @@ const AddChildFab = styled(Fab)({
 
 
  async function loadData(setChildren, setParent, UID) {
-     let Parent = await Single_user_fetch(UID,setParent);
-     
-        
-        const children = Parent.children;
-        console.log(children);
-        
-        const childrenData = [];
-        for (const child of children) {
-            childrenData.push(await Single_user_fetch(child,setChildren));
-        }
-        // await children.forEach(async(child) => {
-        //      childrenData.push( await Single_user_fetch( child,setChildren));
-        //     });
-            console.log(childrenData);
-        setChildren(childrenData);
-        }
+    let Parent = await Single_user_fetch(UID,setParent);
+    
+    const children = Parent.children;
+    
+    const childrenData = [];
+    for (const child of children) {
+        childrenData.push(await Single_user_fetch(child,setChildren));
+    }
+    setChildren(childrenData);
+}
+
+var selected = null;
+
 function Profile() {
 
     const [open, setOpen] = useState(false);
@@ -62,24 +59,36 @@ function Profile() {
 
     let UID = Cookies.get('token')
     if (Parent === null){
-
         loadData(setChildren, setParent, UID);
     }
-        const handleParentClick = () => {
+
+    const handleParentClick = () => {
+        selected = Parent;
         setOpen(true);
     };
 
-    const handleChildClick = () => {
+    const handleChildClick = (child) => {
+        selected = child;
         setOpen(true);
     };
 
     const handleClose = () => {
+        selected = null;
+        setId('');
         setOpen(false);
     };
 
     const handleConfirm = () => {
-        
-        setOpen(false);
+        if(selected != null && selected.PIN.toString() == id) {
+            setId('');
+            setOpen(false);
+            
+            // create new cookie with child info
+            Cookies.set('child', JSON.stringify(selected));
+            
+            selected = null;
+            window.location.href = '/videos';
+        }
     };
 
     const handleAddChild = () => {
@@ -147,7 +156,7 @@ function Profile() {
             {/* Children Avatars */}
             <Grid container spacing={2} justifyContent="center">
             {Array.isArray(children) && children.map((child, index) => (
-                <IconButton key={index} onClick={handleChildClick}>
+                <IconButton key={index} onClick={(e) => handleChildClick(child)}>
                     <CustomAvatar src={child.imageURL} />
                 </IconButton>
             ))}

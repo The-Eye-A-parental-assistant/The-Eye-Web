@@ -17,4 +17,6 @@ export async function Single_video_fetch(id,setVideo,setCreator){
     const CreatorSnapshot = await getDoc(CreatorRef); // Pass the collection reference to getDocs()
       
     setCreator(Creator.fromFirestore(CreatorSnapshot));
+    
+    return Video.fromFirestore(videoSnapshot);
   }

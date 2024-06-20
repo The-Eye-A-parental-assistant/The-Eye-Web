@@ -15,28 +15,44 @@ class Child extends User{
         this.favourites=favourites;
         this.prefs=prefs;
         this.screenTime=screenTime;
-}
+    }
 
-
-static fromFirestore(doc) {
-    const data = doc.data();
+  static fromJSON(json) {
+    const object = JSON.parse(json);
     return new Child(
-        doc.id,
-        // data.gender, 
-        "male",   
-        data.name,
-        data.imageURL,
-        "",
-        "", 
-        "",
-        [],
-        [],
-        [],
-        [],
-        [],
-        {}
+      object.id,
+      object.gender, 
+      object.name,
+      object.imageURL,
+      object.parentID,
+      object.PIN,
+      object.birthDate,
+      object.history,
+      object.likes,
+      object.dislikes,
+      object.favourites,
+      object.prefs,
+      object.screenTime
     );
   }
 
+  static fromFirestore(doc) {
+    const data = doc.data();
+    return new Child(
+        doc.id,
+        data.gender, 
+        data.name,
+        data.imageURL,
+        data.parentID,
+        data.PIN,
+        data.birthDate,
+        data.history,
+        data.likes,
+        data.dislikes,
+        data.favourites,
+        data.prefs,
+        data.screenTime
+    );
+  }
 }
 export default Child;

@@ -37,18 +37,15 @@ function App() {
         {/* <Navbar/> */}
         {/* <Wrapper> */}
           
-          
-          <Routes>
-           
-            {/* <Route path="/auth/" element={<AuthPage/>} /> */}
-            <Route path="/" element={<Home/>} />
-              <Route path="video/:id" element={<Video/>} />
-              <Route path="/Creators" element={<Creators/>} />
-              <Route path="/Login" element={<AuthPage/>} />
-              <Route path="/Profiles" element={<Profiles/>} />
-              <Route path="/AddChild" element={<AddChild/>} />
-          
-          </Routes>
+
+        <Routes>
+          <Route path="/" element={<AuthPage/>} />
+          <Route path="video/:id" element={<Video/>} />
+          <Route path="/creators" element={<Creators/>} />
+          <Route path="/login" element={<AuthPage/>} />
+          <Route path="/profiles" element={<Profiles/>} />
+          <Route path="/videos" element={<Home/>} />
+        </Routes>
 
           
         
