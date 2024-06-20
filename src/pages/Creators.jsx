@@ -9,15 +9,19 @@ import {
     Container,
 } from '@mui/material';
 import ChildSide from '../components/ChildSide';
-// A single subscription card component
+import { db } from '../utils/firebaseinit';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import Creator from '../models/Creator';
 
-const SubscriptionCard = ({ name, subscribers, imageUrl }) => (
+
+// A single subscription card component
+const SubscriptionCard = ({ creator }) => (
     <Card sx={{ maxWidth: 345 , height:350 }}>
         <CardMedia
             component="img"
             height="140"
-            image={imageUrl}
-            alt={`${name}`}
+            image={creator.imageURL}
+            alt={creator.nam}
             sx={{
                 borderRadius: '50%',
                 width: '140px',
@@ -27,34 +31,43 @@ const SubscriptionCard = ({ name, subscribers, imageUrl }) => (
                 display: 'block',
                 marginTop: '10px',
                 marginBottom:'10px'
-                }}
+            }}
         />
         <CardContent>
         
             <Typography gutterBottom variant="h5" component="div" sx={{marginTop: '30px',marginBottom:'10px'}}>
-                {name}
+                {creator.name}
             </Typography>
             <Typography variant="body2" sx={{marginTop: '30px',marginBottom:'20px'}} color="text.secondary">
-                {subscribers} 
+                {`${creator.videos.length} videos`} 
             </Typography>
             <Divider />
         </CardContent>
     </Card>
 );
 
+
 // Main component that renders the grid of subscription cards
-const SubscriptionPage = ({ subscriptions }) => {
+const SubscriptionPage = () => {
+    const [subscriptions, setSubscriptions] = React.useState([]);
+    React.useEffect(() => {
+        const q = query(collection(db, "users"), where("role", "==", "creator"));
+
+        getDocs(q).then((querySnapshot) => {
+            const creators = []
+            querySnapshot.forEach((doc) => creators.push(Creator.fromFirestore(doc)));
+            setSubscriptions(creators);
+        });
+    }, []);
+
     return (
         <Container sx={{mt:'40px'}} >
             
             <ChildSide/>
-            <Grid container spacing={8}>
+            <Grid container spacing={8}sx={{ paddingTop: '80px' }}>
                 {subscriptions.map((subscription, index) => (
                     <Grid item key={index} xs={12} sm={6} md={3} >
-                        <SubscriptionCard
-                            name={subscription.name}
-                            subscribers={subscription.subscribers}
-                            imageUrl={subscription.imageUrl}
+                        <SubscriptionCard creator={subscription}
                         />
                     </Grid>
                 ))}
@@ -63,78 +76,4 @@ const SubscriptionPage = ({ subscriptions }) => {
     );
 };
 
-// Example subscription data
-const subscriptions = [
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    {
-        name: 'Oktay Candan',
-        subscribers: '23 Subscribers',
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg', // Replace with actual image path
-    },
-    // ...other subscription objects
-];
-
-const App2 = () => {
-    return <SubscriptionPage subscriptions={subscriptions} />;
-};
-
-export default App2;
+export default SubscriptionPage;
