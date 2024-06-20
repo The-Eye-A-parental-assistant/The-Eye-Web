@@ -6,11 +6,8 @@ import ChildSide from "../components/ChildSide";
 import Navbar from "../components/Navbar";
 import {video_fetch} from "../utils/video_fetch";
 import { useEffect, useState } from "react";
-
-
-
-
-
+import Cookies from 'js-cookie';
+import Child from "../models/Child";
 
 
 // const Container = styled.div`
@@ -42,43 +39,46 @@ const Wrapper = styled.div`
 
 `;
 const Home = () => {
-
-const [videos, setVideo] = useState([]);
+  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
+  const [videos, setVideo] = useState([]);
+  
   useEffect(() => {
-    video_fetch(videos,setVideo)
+    if (child) {
+      video_fetch(setVideo, child.prefs)
+    }
   }, []);
 
   return (
-  <Container>
-    {/* <Menu/> */}
-    <ChildSide/>
+    <Container>
+      {/* <Menu/> */}
+      <ChildSide/>
 
-    <Main >
-      {/* <Wrapper> */}
-      
-    {/* <Navbar/> */}
+      <Main >
+        {/* <Wrapper> */}
+        
+      {/* <Navbar/> */}
 
-    <CardContainer>
-    {videos.map(video => (
-      <Card
-      // const Card = ({id,title,thumbnail,creatorID,type})
-      id={video.id} 
-      title={video.title}
-      thumbnail={video.thumbnail}
-      views={video.views}
-      date={video.date}
-      creatorID={video.creatorID}
-      
-      />
-    ))}
+      <CardContainer>
+      {videos.map(video => (
+        <Card
+        // const Card = ({id,title,thumbnail,creatorID,type})
+        id={video.id} 
+        title={video.title}
+        thumbnail={video.thumbnail}
+        views={video.views}
+        date={video.date}
+        creatorID={video.creatorID}
+        
+        />
+      ))}
 
 
 
-    </CardContainer>
-{/* </Wrapper> */}
-</Main>
-  </Container>
-)
+      </CardContainer>
+      {/* </Wrapper> */}
+      </Main>
+    </Container>
+  );
 }
 
 export default Home;

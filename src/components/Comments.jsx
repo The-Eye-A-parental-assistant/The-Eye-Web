@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
-
-
+import Cookies from 'js-cookie';
+import Child from "../models/Child";
+import { useState } from "react";
 import Profilepic from '../img/Profilepic.jpg';
 
 const Container = styled.div``;
@@ -30,10 +31,11 @@ const Input = styled.input`
 `;
 
 const Comments = ({comments}) => {
+  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   return (
     <Container>
       <NewComment>
-        <Avatar src={Profilepic} />
+        <Avatar src={child.imageURL} />
         <Input placeholder="Add a comment..." />
       </NewComment>
       {comments && comments.map((comment) => (

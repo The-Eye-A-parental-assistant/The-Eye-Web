@@ -69,7 +69,6 @@ function Profile() {
 
     const handleChildClick = (child) => {
         selected = child;
-        console.log(selected);
         setOpen(true);
     };
 
@@ -81,9 +80,13 @@ function Profile() {
 
     const handleConfirm = () => {
         if(selected != null && selected.PIN.toString() == id) {
-            selected = null;
             setId('');
             setOpen(false);
+            
+            // create new cookie with child info
+            Cookies.set('child', JSON.stringify(selected));
+            
+            selected = null;
             window.location.href = '/videos';
         }
     };

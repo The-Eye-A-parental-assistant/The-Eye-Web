@@ -15,10 +15,28 @@ class Child extends User{
         this.favourites=favourites;
         this.prefs=prefs;
         this.screenTime=screenTime;
-}
+    }
 
+  static fromJSON(json) {
+    const object = JSON.parse(json);
+    return new Child(
+      object.id,
+      object.gender, 
+      object.name,
+      object.imageURL,
+      object.parentID,
+      object.PIN,
+      object.birthDate,
+      object.history,
+      object.likes,
+      object.dislikes,
+      object.favourites,
+      object.prefs,
+      object.screenTime
+    );
+  }
 
-static fromFirestore(doc) {
+  static fromFirestore(doc) {
     const data = doc.data();
     return new Child(
         doc.id,
@@ -36,6 +54,5 @@ static fromFirestore(doc) {
         data.screenTime
     );
   }
-
 }
 export default Child;
