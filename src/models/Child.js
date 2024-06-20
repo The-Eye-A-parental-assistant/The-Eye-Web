@@ -22,19 +22,18 @@ static fromFirestore(doc) {
     const data = doc.data();
     return new Child(
         doc.id,
-        // data.gender, 
-        "male",   
+        data.gender, 
         data.name,
         data.imageURL,
-        "",
-        "", 
-        "",
-        [],
-        [],
-        [],
-        [],
-        [],
-        {}
+        data.parentID,
+        data.PIN,
+        data.birthDate,
+        data.history,
+        data.likes,
+        data.dislikes,
+        data.favourites,
+        data.prefs,
+        data.screenTime
     );
   }
 
