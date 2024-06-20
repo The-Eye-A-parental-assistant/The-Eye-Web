@@ -3,6 +3,9 @@ import * as Components from '../components/AuthComponents';
 import Cookies from 'js-cookie';
 import firebaseLogin from "../utils/firebaseLogin";
 import firebaseSignup from "../utils/firebaseSignUp";
+import styled from 'styled-components';
+
+// import '../authStyles.css';
 
 function AuthPage() {
     const [signIn, toggle] = React.useState(true);
@@ -33,6 +36,7 @@ function AuthPage() {
         window.location.href = '/'; // Redirect to home page
     };
 
+    
     const handleSignIn = async (e) => {
         e.preventDefault();
         // Simulate an API call to register a user and get a token
@@ -42,10 +46,11 @@ function AuthPage() {
         
         const fakeToken = UID;
         Cookies.set('token', fakeToken, { expires: 1 }); // Store JWT in cookies for 1 day
-        window.location.href = '/'; // Redirect to home page
+        window.location.href = '/Profiles'; // Redirect to home page
     };
 
     return (
+
         <Components.Container>
             <Components.SignUpContainer signinIn={signIn}>
                 <Components.Form onSubmit={handleSignUp}>
@@ -57,7 +62,7 @@ function AuthPage() {
                         value={formData.name}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Input 
                         type='email' 
                         placeholder='Email' 
@@ -65,7 +70,7 @@ function AuthPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Input 
                         type='password' 
                         placeholder='Password' 
@@ -73,7 +78,7 @@ function AuthPage() {
                         value={formData.password}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Input 
                         type='password' 
                         placeholder='Confirm Password' 
@@ -81,7 +86,7 @@ function AuthPage() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Button type='submit'>Sign Up</Components.Button>
                 </Components.Form>
             </Components.SignUpContainer>
@@ -96,7 +101,7 @@ function AuthPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Input 
                         type='password' 
                         placeholder='Password' 
@@ -104,7 +109,7 @@ function AuthPage() {
                         value={formData.password}
                         onChange={handleChange}
                         required 
-                    />
+                        />
                     <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
                     <Components.Button type='submit'>Sign In</Components.Button>
                 </Components.Form>
@@ -134,6 +139,8 @@ function AuthPage() {
                 </Components.Overlay>
             </Components.OverlayContainer>
         </Components.Container>
+
+
     );
 }
 

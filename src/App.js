@@ -3,7 +3,9 @@ import Menu from './components/Menu';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Video from './pages/Video';
-import AuthPage from './pages/Auth'
+import AuthPage from './pages/Auth';
+import Creators from './pages/Creators';
+import Profiles from './pages/Profiles';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -29,25 +31,25 @@ function App() {
       <BrowserRouter>
       
       
-      <Menu />
+      {/* <Menu /> */}
       <Main>
-        <Navbar/>
-        <Wrapper>
+        {/* <Navbar/> */}
+        {/* <Wrapper> */}
           
           
           <Routes>
-            <Route path="/">
-              <Route index element={<Home/>}/>
-              <Route path="video">
-                <Route path=":id" element={<Video/>}/>
-              </Route>
-            </Route>
-            <Route path="/auth/" element={<AuthPage/>} />
+           
+            {/* <Route path="/auth/" element={<AuthPage/>} /> */}
+            <Route path="/" element={<Creators/>} />
+              <Route path="video/:id" element={<Video/>} />
+              {/* <Route path="/Creators" element={<Creators/>} /> */}
+              {/* <Route path="/Login" element={<AuthPage/>} /> */}
+              <Route path="/Profiles" element={<Profiles/>} />
+          
           </Routes>
 
           
         
-        </Wrapper>
       </Main>
       </BrowserRouter>
     </Container>

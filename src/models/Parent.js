@@ -18,12 +18,11 @@ static fromFirestore(doc) {
         "male",   
         data.name,
         data.imageURL,
-        // data.transactions,
-        "",
-        [],
-        // data.videos
-        [],
-        0
+        data.plan,
+        data.children,
+        data.transactions,
+        data.PIN
+    
     );
   }
 

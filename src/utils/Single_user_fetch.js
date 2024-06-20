@@ -15,12 +15,15 @@ export async function Single_user_fetch(id,setUser){
 
     if (userSnapshot.data().role==="child"){
       setUser(Child.fromFirestore(userSnapshot));
+      return Child.fromFirestore(userSnapshot)
     }
     else if (userSnapshot.data().role==="creator"){
         setUser(Creator.fromFirestore(userSnapshot));
+        return Creator.fromFirestore(userSnapshot)
     }
     else{
         setUser(Parent.fromFirestore(userSnapshot));
-    }
+        return Parent.fromFirestore(userSnapshot)
+      }
   
   }

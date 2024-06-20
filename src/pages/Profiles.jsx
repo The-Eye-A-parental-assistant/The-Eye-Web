@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Avatar, Fab, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/system'; 
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'; 
+import Cookies from 'js-cookie';
+import { Single_user_fetch } from '../utils/Single_user_fetch';
+
 
 //  styles for Avatar
 const CustomAvatar = styled(Avatar)(({ theme }) => ({
@@ -33,12 +36,36 @@ const AddChildFab = styled(Fab)({
 });
 
 
+ async function loadData(setChildren, setParent, UID) {
+     let Parent = await Single_user_fetch(UID,setParent);
+     
+        
+        const children = Parent.children;
+        console.log(children);
+        
+        const childrenData = [];
+        for (const child of children) {
+            childrenData.push(await Single_user_fetch(child,setChildren));
+        }
+        // await children.forEach(async(child) => {
+        //      childrenData.push( await Single_user_fetch( child,setChildren));
+        //     });
+            console.log(childrenData);
+        setChildren(childrenData);
+        }
 function Profile() {
+
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [children, setChildren] = useState([]);
+    const [Parent, setParent] = useState(null);
 
-    const handleParentClick = () => {
+    let UID = Cookies.get('token')
+    if (Parent === null){
+
+        loadData(setChildren, setParent, UID);
+    }
+        const handleParentClick = () => {
         setOpen(true);
     };
 
@@ -64,18 +91,20 @@ function Profile() {
         setId(event.target.value);
     };
 
+
     return (
         <div style={{ position: 'relative' }}>
-            <Grid container spacing={2} justifyContent="center" >
-                {/* Parent Avatar */}
-                <Grid item xs={12}>
-                    <Grid container spacing={2} justifyContent="center" >
-                        <IconButton onClick={handleParentClick}>
-                            <CustomAvatar src='https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg' />
-                        </IconButton>
-                    </Grid>
-                </Grid>
+        {Parent && (
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={12}>
+              <Grid container spacing={2} justifyContent="center">
+                <IconButton onClick={handleParentClick}>
+                  <CustomAvatar src={Parent.imageURL} />
+                </IconButton>
+              </Grid>
             </Grid>
+          </Grid>
+        )}
 
             
             <Dialog open={open} onClose={handleClose}>
@@ -114,12 +143,12 @@ function Profile() {
 
             {/* Children Avatars */}
             <Grid container spacing={2} justifyContent="center">
-                {children.map((child, index) => (
-                    <IconButton key={index} onClick={handleChildClick}>
-                        <CustomAvatar src="child_avatar.jpg" />
-                    </IconButton>
-                ))}
-            </Grid>
+            {Array.isArray(children) && children.map((child, index) => (
+                <IconButton key={index} onClick={handleChildClick}>
+                    <CustomAvatar src={child.imageURL} />
+                </IconButton>
+            ))}
+        </Grid>
         </div>
     );
 }

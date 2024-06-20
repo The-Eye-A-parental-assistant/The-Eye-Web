@@ -16,10 +16,11 @@ const Container= styled.div`
   gap: 10px;
   `;
   const Image = styled.img`
-  // width: 100%;
+  width: 100%;
   height:   ${(props) => props.type === "sm" ? "120px" : "200px"};
   background-color: #cfcfcf;
   flex: 3;
+
   `;
 
   const Details = styled.div`
@@ -69,7 +70,9 @@ const Card = ({id,title,thumbnail,type,views,date,creatorID}) => {
     // matnsash t3mlha dynamic
     <Link to={link} style={{textDecoration:"none"}}>
     <Container type={type}>
-      <Image  type={type} src={thumbnail} />
+
+      <Image style={{objectFit: "cover"}} type={type} src={thumbnail} />
+      {/* <Image style={} type={type} src={thumbnail} /> */}
     <Details  type={type}>
       <ChannelImage  type={type} src={creator.imageURL}/>
       <Texts>

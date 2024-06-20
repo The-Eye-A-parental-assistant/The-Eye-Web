@@ -5,8 +5,9 @@ import {video_fetch} from "../utils/video_fetch";
 import { useEffect, useState } from "react";
 import {Single_video_fetch} from '../utils/Single_video_fetch';
 import { useParams } from 'react-router-dom';
+import Menu from '../components/Menu';
 
-
+import Navbar from '../components/Navbar';
 
 
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -14,13 +15,28 @@ import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import Comments from "../components/Comments";
 import historyGenerator from "../utils/HistoryGenerator";
+import ChildSide from "../components/ChildSide";
 
+const Container2 = styled.div`
+  display: flex;
+  padding-top: 80px;
+`;
 
+const Main = styled.div`
+  flex: 7;
 
+  
+`;
+const Wrapper = styled.div`
+//  padding: 22px 96px;
+ padding: 13px 12px;
+
+`;
 
 const Container = styled.div`
   display: flex;
   gap: 24px;
+  padding: 5px;
 `;
 
 const Content = styled.div`
@@ -144,6 +160,11 @@ const Video = () => {
   };
 
   return (
+    <Container2>
+      {/* <Menu /> */}
+      <ChildSide/> 
+      <Main>
+      {/* <Navbar/> */}
   <Container>
     <Content>
       <VideoWrapper>
@@ -209,6 +230,7 @@ const Video = () => {
          // const Card = ({id,title,thumbnail,creatorID,type})
          id={video.id} 
          title={video.title}
+
          thumbnail={video.thumbnail}
          creatorID={video.creatorID}
          type='sm'
@@ -219,6 +241,10 @@ const Video = () => {
         ))}
     </Recommendation>
   </Container>
+
+
+  </Main>
+  </Container2>
 )
 }
 
