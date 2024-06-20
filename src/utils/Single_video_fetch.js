@@ -1,22 +1,18 @@
-import {db} from './firebaseinit';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from './firebaseinit';
 import Video from '../models/video';
 import Creator from '../models/Creator';
 
+export async function Single_video_fetch(id, setVideo, setCreator) {
+  const videoRef = doc(db, 'videos', id); // Create a reference to the "videos" collection
+  const videoSnapshot = await getDoc(videoRef); // Pass the collection reference to getDocs()
 
-import { doc, getDoc } from "firebase/firestore";
+  setVideo(Video.fromFirestore(videoSnapshot));
 
+  const CreatorRef = doc(db, 'users', videoSnapshot.data().creatorID); // Create a reference to the "videos" collection
+  const CreatorSnapshot = await getDoc(CreatorRef); // Pass the collection reference to getDocs()
 
-export async function Single_video_fetch(id,setVideo,setCreator){   
-    const videoRef = doc(db, "videos", id); // Create a reference to the "videos" collection
-    const videoSnapshot = await getDoc(videoRef); // Pass the collection reference to getDocs()
-    
+  setCreator(Creator.fromFirestore(CreatorSnapshot));
 
-    setVideo(Video.fromFirestore(videoSnapshot));
-    
-    const CreatorRef = doc(db, "users", videoSnapshot.data().creatorID); // Create a reference to the "videos" collection
-    const CreatorSnapshot = await getDoc(CreatorRef); // Pass the collection reference to getDocs()
-      
-    setCreator(Creator.fromFirestore(CreatorSnapshot));
-    
-    return Video.fromFirestore(videoSnapshot);
-  }
+  return Video.fromFirestore(videoSnapshot);
+}

@@ -1,16 +1,16 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from './firebaseinit';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 
-export default async function firebaseSignup(email, password, name){
-  let user = undefined;
+export default async function firebaseSignup(email, password, name) {
+  let user;
   await createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       user = userCredential.user;
       const userRef = doc(db, 'users', user.uid);
       await setDoc(userRef, {
-        name: name,
-        email: email,
+        name,
+        email,
         role: 'parent',
         PIN: 1111,
         children: [],
@@ -19,15 +19,14 @@ export default async function firebaseSignup(email, password, name){
         isParent: true,
         plan: 'free',
       })
-      .catch((error) => {});
+        .catch((_) => {});
     })
     .catch((error) => {
-      alert('error signning up. try again\n' + error.message);
+      alert(`error signning up. try again\n${error.message}`);
       return undefined;
     });
 
-    if (user === undefined)
-      return undefined;
+  if (user === undefined) { return undefined; }
 
-    return user.uid;
+  return user.uid;
 }

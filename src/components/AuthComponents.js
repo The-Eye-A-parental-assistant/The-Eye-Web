@@ -1,6 +1,6 @@
- import styled from 'styled-components';
+import styled from 'styled-components';
 
- export const Container = styled.div`
+export const Container = styled.div`
  background-color: #fff;
  border-radius: 10px;
  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -11,7 +11,7 @@
  min-height: 550px;
  `;
 
- export const SignUpContainer = styled.div`
+export const SignUpContainer = styled.div`
   position: absolute;
   top: 0;
   height: 100%;
@@ -20,16 +20,15 @@
   width: 50%;
   opacity: 0;
   z-index: 1;
-  ${props => props.signinIn !== true ? `
+  ${(props) => (props.signinIn !== true ? `
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
-  ` 
-  : null}
+  `
+    : null)}
  `;
- 
 
- export const SignInContainer = styled.div`
+export const SignInContainer = styled.div`
  position: absolute;
  top: 0;
  height: 100%;
@@ -37,10 +36,10 @@
  left: 0;
  width: 50%;
  z-index: 2;
- ${props => (props.signinIn !== true ? `transform: translateX(100%);` : null)}
+ ${(props) => (props.signinIn !== true ? 'transform: translateX(100%);' : null)}
  `;
- 
- export const Form = styled.form`
+
+export const Form = styled.form`
  background-color: #ffffff;
  display: flex;
  align-items: center;
@@ -50,22 +49,21 @@
  height: 100%;
  text-align: center;
  `;
- 
- export const Title = styled.h1`
+
+export const Title = styled.h1`
  font-weight: bold;
  margin: 0;
  `;
- 
- export const Input = styled.input`
+
+export const Input = styled.input`
  background-color: #eee;
  border: none;
  padding: 12px 15px;
  margin: 8px 30px;
  width: 100%;
  `;
- 
 
- export const Button = styled.button`
+export const Button = styled.button`
     border-radius: 20px;
     border: 1px solid #7EAA92;
     background-color: #C3EDC0;
@@ -84,18 +82,18 @@
         outline: none;
     }
  `;
- export const GhostButton = styled(Button)`
+export const GhostButton = styled(Button)`
  background-color: transparent;
  border-color: #ffffff;
  `;
- 
- export const Anchor = styled.a`
+
+export const Anchor = styled.a`
  color: #333;
  font-size: 14px;
  text-decoration: none;
  margin: 15px 0;
  `;
- export const OverlayContainer = styled.div`
+export const OverlayContainer = styled.div`
 position: absolute;
 top: 0;
 left: 50%;
@@ -104,8 +102,7 @@ height: 100%;
 overflow: hidden;
 transition: transform 0.6s ease-in-out;
 z-index: 100;
-${props =>
-  props.signinIn !== true ? `transform: translateX(-100%);` : null}
+${(props) => (props.signinIn !== true ? 'transform: translateX(-100%);' : null)}
 `;
 
 export const Overlay = styled.div`
@@ -122,10 +119,10 @@ height: 100%;
 width: 200%;
 transform: translateX(0);
 transition: transform 0.6s ease-in-out;
-${props => (props.signinIn !== true ? `transform: translateX(50%);` : null)}
+${(props) => (props.signinIn !== true ? 'transform: translateX(50%);' : null)}
 `;
- 
- export const OverlayPanel = styled.div`
+
+export const OverlayPanel = styled.div`
      position: absolute;
      display: flex;
      align-items: center;
@@ -140,18 +137,18 @@ ${props => (props.signinIn !== true ? `transform: translateX(50%);` : null)}
      transition: transform 0.6s ease-in-out;
  `;
 
- export const LeftOverlayPanel = styled(OverlayPanel)`
+export const LeftOverlayPanel = styled(OverlayPanel)`
    transform: translateX(-20%);
-   ${props => props.signinIn !== true ? `transform: translateX(0);` : null}
+   ${(props) => (props.signinIn !== true ? 'transform: translateX(0);' : null)}
  `;
 
- export const RightOverlayPanel = styled(OverlayPanel)`
+export const RightOverlayPanel = styled(OverlayPanel)`
      right: 0;
      transform: translateX(0);
-     ${props => props.signinIn !== true ? `transform: translateX(20%);` : null}
+     ${(props) => (props.signinIn !== true ? 'transform: translateX(20%);' : null)}
  `;
 
- export const Paragraph = styled.p`
+export const Paragraph = styled.p`
  font-size: 14px;
    font-weight: 100;
    line-height: 20px;
