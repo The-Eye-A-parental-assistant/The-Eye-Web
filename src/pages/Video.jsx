@@ -11,9 +11,24 @@ import Navbar from '../components/Navbar';
 import Cookies from 'js-cookie';
 import Child from "../models/Child";
 
+import SendIcon from '@mui/icons-material/Send';
 
+
+//msh ma3mol
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+//ma3mol
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+
+//msh ma3mol
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+//ma3mol
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+
+//msh ma3mol
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+//ma3mol
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import Comments from "../components/Comments";
 import historyGenerator from "../utils/HistoryGenerator";
@@ -141,6 +156,10 @@ const Video = () => {
   const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [creator, setCreator] = useState([]);
 
+  const [thumbUpClicked, setThumbUpClicked] = useState(false);
+  const [thumbDownClicked, setThumbDownClicked] = useState(false);
+  const [bookmarkClicked, setBookmarkClicked] = useState(false);
+
   // const urlParams = new URLSearchParams(window.location.search);
   // const id = urlParams.get('id');
   const { id } = useParams();
@@ -161,6 +180,17 @@ const Video = () => {
       .catch((error) => console.log('Error copying text: ', error));
   };
 
+  const handleThumbUpClick = () => {
+    setThumbUpClicked(!thumbUpClicked);
+  };
+
+  const handleThumbDownClick = () => {
+    setThumbDownClicked(!thumbDownClicked);
+  };
+
+  const handleBookmarkClick = () => {
+    setBookmarkClicked(!bookmarkClicked);
+  };
   return (
     <Container2>
       {/* <Menu /> */}
@@ -191,9 +221,17 @@ const Video = () => {
 
           <Buttons></Buttons>
           <Buttons>
-          <Button> <ThumbUpAltOutlinedIcon/>Like</Button>
-          <Button><ThumbDownOutlinedIcon/>Dislike</Button>
-          <Button onClick={handleCopyLink}><ReplyOutlinedIcon/>Share</Button>
+          
+      <Button onClick={handleThumbUpClick}>
+        {thumbUpClicked ? <ThumbUpAltOutlinedIcon /> : <ThumbUpIcon style={{color: '#8ED197'}}/>}Like
+      </Button>
+      <Button onClick={handleThumbDownClick}>
+        {thumbDownClicked ? <ThumbDownOutlinedIcon /> : <ThumbDownIcon style={{color: '#8ED197'}} />}Dislike
+      </Button>
+      <Button onClick={handleCopyLink}><ReplyOutlinedIcon/>Share</Button>
+      <Button onClick={handleBookmarkClick}>
+        {bookmarkClicked ? <BookmarkAddOutlinedIcon /> : <BookmarkAddedIcon style={{color: '#8ED197'}}/>}Save
+      </Button>
 
           </Buttons>
 

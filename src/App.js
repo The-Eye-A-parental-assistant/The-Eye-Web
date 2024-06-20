@@ -6,6 +6,7 @@ import Video from './pages/Video';
 import AuthPage from './pages/Auth';
 import Creators from './pages/Creators';
 import Profiles from './pages/Profiles';
+import AddChild from './pages/AddChild';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -36,7 +37,7 @@ function App() {
         {/* <Navbar/> */}
         {/* <Wrapper> */}
           
-          
+
         <Routes>
           <Route path="/" element={<AuthPage/>} />
           <Route path="video/:id" element={<Video/>} />

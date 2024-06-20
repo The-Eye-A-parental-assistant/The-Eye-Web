@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -452,10 +453,7 @@ export default function MiniDrawer() {
                 </List>
               
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");', backgroundColor: '#F0E5FF' }}>
-                <DrawerHeader />
-                {/* <Profile /> */}
-            </Box>
+            
         </Box>
     );
 }
