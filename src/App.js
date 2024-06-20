@@ -6,6 +6,7 @@ import Video from './pages/Video';
 import AuthPage from './pages/Auth';
 import Creators from './pages/Creators';
 import Profiles from './pages/Profiles';
+import AddChild from './pages/AddChild';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -40,11 +41,12 @@ function App() {
           <Routes>
            
             {/* <Route path="/auth/" element={<AuthPage/>} /> */}
-            <Route path="/" element={<Creators/>} />
+            <Route path="/" element={<Home/>} />
               <Route path="video/:id" element={<Video/>} />
-              {/* <Route path="/Creators" element={<Creators/>} /> */}
-              {/* <Route path="/Login" element={<AuthPage/>} /> */}
+              <Route path="/Creators" element={<Creators/>} />
+              <Route path="/Login" element={<AuthPage/>} />
               <Route path="/Profiles" element={<Profiles/>} />
+              <Route path="/AddChild" element={<AddChild/>} />
           
           </Routes>
 

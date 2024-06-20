@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
-
+import SendIcon from '@mui/icons-material/Send';
 
 import Profilepic from '../img/Profilepic.jpg';
 
@@ -35,6 +35,7 @@ const Comments = ({comments}) => {
       <NewComment>
         <Avatar src={Profilepic} />
         <Input placeholder="Add a comment..." />
+        <SendIcon />
       </NewComment>
       {comments && comments.map((comment) => (
         <Comment

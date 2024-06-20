@@ -83,6 +83,7 @@ function Profile() {
     };
 
     const handleAddChild = () => {
+        window.location.href = '/AddChild';
         setChildren([...children, { id: id }]);
         setId('');
     };
@@ -93,7 +94,8 @@ function Profile() {
 
 
     return (
-        <div style={{ position: 'relative' }}>
+        
+        <div style={{ position: 'relative', backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png")', width: '100vw', height: '100vh' }}>
         {Parent && (
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={12}>
@@ -137,6 +139,7 @@ function Profile() {
             </Dialog>
 
             {/* Button to Add a Child */}
+            
             <AddChildFab onClick={handleAddChild}>
                 <PersonAddAlt1Icon />
             </AddChildFab>

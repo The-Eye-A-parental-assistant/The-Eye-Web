@@ -48,7 +48,8 @@ const SubscriptionPage = ({ subscriptions }) => {
         <Container sx={{mt:'40px'}} >
             
             <ChildSide/>
-            <Grid container spacing={8}>
+            {/* to be ADDED  W SHEEL EL BOX EL*/}
+            <Grid container spacing={8}sx={{ paddingTop: '80px' }}>
                 {subscriptions.map((subscription, index) => (
                     <Grid item key={index} xs={12} sm={6} md={3} >
                         <SubscriptionCard
