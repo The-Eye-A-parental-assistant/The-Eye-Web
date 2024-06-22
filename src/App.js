@@ -45,6 +45,7 @@ function App() {
           <Route path="/login" element={<AuthPage/>} />
           <Route path="/profiles" element={<Profiles/>} />
           <Route path="/videos" element={<Home/>} />
+          <Route path="/addchild" element={<AddChild/>} />
         </Routes>
 
           

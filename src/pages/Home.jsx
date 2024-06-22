@@ -44,6 +44,7 @@ const Home = () => {
   
   useEffect(() => {
     if (child) {
+      console.log(child)
       video_fetch(setVideo, child.prefs)
     }
   }, []);

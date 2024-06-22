@@ -10,6 +10,8 @@ import Menu from '../components/Menu';
 import Navbar from '../components/Navbar';
 import Cookies from 'js-cookie';
 import Child from "../models/Child";
+import updateChild from '../utils/updateChild'
+import { Timestamp } from "firebase/firestore";
 
 import SendIcon from '@mui/icons-material/Send';
 
@@ -33,6 +35,7 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import Comments from "../components/Comments";
 import historyGenerator from "../utils/HistoryGenerator";
 import ChildSide from "../components/ChildSide";
+import { set } from "firebase/database";
 
 const Container2 = styled.div`
   display: flex;
@@ -42,7 +45,7 @@ const Container2 = styled.div`
 const Main = styled.div`
   flex: 7;
 
-  
+
 `;
 const Wrapper = styled.div`
 //  padding: 22px 96px;
@@ -75,7 +78,7 @@ const Details = styled.div`
 `;
 
 const Info = styled.span`
-color: Gray;  
+color: Gray;
 `;
 
 const Buttons = styled.div`
@@ -150,25 +153,31 @@ const Subscribe = styled.button`
 
 const Video = () => {
   // window.location.reload(false);
-  
+  const { id } = useParams();
+
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState([]);
   const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [creator, setCreator] = useState([]);
 
-  const [thumbUpClicked, setThumbUpClicked] = useState(false);
-  const [thumbDownClicked, setThumbDownClicked] = useState(false);
-  const [bookmarkClicked, setBookmarkClicked] = useState(false);
+  const [thumbUpClicked, setThumbUpClicked] = useState(child.likes.includes(id));
+  const [thumbDownClicked, setThumbDownClicked] = useState(child.dislikes.includes(id));
+  const [bookmarkClicked, setBookmarkClicked] = useState(child.favourites.includes(id));
+
+  let historyAdded = false;
 
   // const urlParams = new URLSearchParams(window.location.search);
   // const id = urlParams.get('id');
-  const { id } = useParams();
 
   useEffect(() => {
     Single_video_fetch(id,setVideo,setCreator)
-    .then((video) => {
-      console.log(video);
+    .then(async (video) => {
       video_fetch(setVideos, video.tags, video.videoURL)
+      if (!historyAdded) {
+        child.history.push({video: id, date: Timestamp.fromDate(new Date())});
+        await updateChild(child, {history: child.history});
+        historyAdded = true;
+      }
     })
   }, [id]);
 
@@ -181,56 +190,83 @@ const Video = () => {
   };
 
   const handleThumbUpClick = () => {
+    console.log("was " + thumbUpClicked);
     setThumbUpClicked(!thumbUpClicked);
+    setThumbDownClicked(false);
+    console.log("now " + thumbUpClicked);
+
+    child.dislikes = child.dislikes.filter(dislike => dislike !== id);
+
+    if (thumbUpClicked === true)
+      child.likes.push(id);
+    else
+      child.likes = child.likes.filter(like => like !== id);
+
+    updateChild(child, {likes: child.likes, dislikes: child.dislikes});
   };
 
   const handleThumbDownClick = () => {
     setThumbDownClicked(!thumbDownClicked);
+    setThumbUpClicked(false);
+
+    child.likes = child.likes.filter(like => like !== id);
+
+    if (thumbDownClicked === true)
+      child.dislikes.push(id);
+    else
+      child.dislikes = child.dislikes.filter(dislike => dislike !== id);
+
+    updateChild(child, {likes: child.likes, dislikes: child.dislikes});
   };
 
   const handleBookmarkClick = () => {
     setBookmarkClicked(!bookmarkClicked);
+
+    if (bookmarkClicked === true)
+      child.favourites.push(id);
+    else
+      child.favourites = child.favourites.filter(favourite => favourite !== id);
+
+    updateChild(child, {favourites: child.favourites});
   };
   return (
     <Container2>
       {/* <Menu /> */}
-      <ChildSide/> 
+      <ChildSide/>
       <Main>
       {/* <Navbar/> */}
   <Container>
     <Content>
       <VideoWrapper>
-      
-
         <video
-      width="100%"
-      height="520"
-      controls
-      autoPlay
-      poster={video.thumbnail}
-      key={video.videoURL}
-    >
+          width="100%"
+          height="520"
+          controls
+          autoPlay
+          poster={video.thumbnail}
+          key={video.videoURL}
+        >
       <source src={video.videoURL} type="video/mp4"/>
       Your browser does not support the video tag.
     </video>
-
       </VideoWrapper>
+
       <Title>{video.title}</Title>
       <Details>
           <Info>{video.views} views • {historyGenerator(video.date)}</Info>
 
           <Buttons></Buttons>
           <Buttons>
-          
+
       <Button onClick={handleThumbUpClick}>
-        {thumbUpClicked ? <ThumbUpAltOutlinedIcon /> : <ThumbUpIcon style={{color: '#8ED197'}}/>}Like
+        {thumbUpClicked ? <ThumbUpIcon style={{color: '#8ED197'}}/> : <ThumbUpAltOutlinedIcon />}Like
       </Button>
       <Button onClick={handleThumbDownClick}>
-        {thumbDownClicked ? <ThumbDownOutlinedIcon /> : <ThumbDownIcon style={{color: '#8ED197'}} />}Dislike
+        {thumbDownClicked ? <ThumbDownIcon style={{color: '#8ED197'}} /> : <ThumbDownOutlinedIcon />}Dislike
       </Button>
       <Button onClick={handleCopyLink}><ReplyOutlinedIcon/>Share</Button>
       <Button onClick={handleBookmarkClick}>
-        {bookmarkClicked ? <BookmarkAddOutlinedIcon /> : <BookmarkAddedIcon style={{color: '#8ED197'}}/>}Save
+        {bookmarkClicked ? <BookmarkAddedIcon style={{color: '#8ED197'}}/> : <BookmarkAddOutlinedIcon />}Save
       </Button>
 
           </Buttons>
@@ -253,12 +289,12 @@ const Video = () => {
     </Content>
 
     <Recommendation>
-    
+
 
 {videos.map(video => (
          <Card
          // const Card = ({id,title,thumbnail,creatorID,type})
-         id={video.id} 
+         id={video.id}
          title={video.title}
 
          thumbnail={video.thumbnail}
