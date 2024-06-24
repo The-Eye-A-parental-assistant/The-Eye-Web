@@ -5,7 +5,9 @@ import firebaseLogin from "../utils/firebaseLogin";
 import firebaseSignup from "../utils/firebaseSignUp";
 import styled from 'styled-components';
 
-// import '../authStyles.css';
+import "./authStyles.css";
+
+
 
 function AuthPage() {
     const [signIn, toggle] = React.useState(true);
@@ -50,10 +52,11 @@ function AuthPage() {
     };
 
     return (
-
+        <div className="body1">
         <Components.Container>
             <Components.SignUpContainer signinIn={signIn}>
                 <Components.Form onSubmit={handleSignUp}>
+                    
                     <Components.Title>Create Account</Components.Title>
                     <Components.Input 
                         type='text' 
@@ -87,6 +90,32 @@ function AuthPage() {
                         onChange={handleChange}
                         required 
                         />
+
+                        <Components.RadioContainer>
+
+                        <Components.RadioLabel>
+                            <Components.RadioInput 
+                                type="radio" 
+                                name="role" 
+                                value="creator" 
+                                checked={formData.role === "creator"} 
+                                onChange={handleChange} 
+                            />
+                            <Components.RadioSpan>Creator</Components.RadioSpan>
+                        </Components.RadioLabel>
+                        <Components.RadioLabel>
+                            <Components.RadioInput 
+                                type="radio" 
+                                name="role" 
+                                value="parent" 
+                                checked={formData.role === "parent"} 
+                                onChange={handleChange} 
+                            />
+                            <Components.RadioSpan>Parent</Components.RadioSpan>
+                        </Components.RadioLabel>
+                        </Components.RadioContainer>
+
+
                     <Components.Button type='submit'>Sign Up</Components.Button>
                 </Components.Form>
             </Components.SignUpContainer>
@@ -140,6 +169,7 @@ function AuthPage() {
             </Components.OverlayContainer>
         </Components.Container>
 
+                        </div>
 
     );
 }

@@ -12,10 +12,35 @@ import ChildSide from '../components/ChildSide';
 import { db } from '../utils/firebaseinit';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Creator from '../models/Creator';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { ResponsiveContainer } from 'recharts';
 
+const Container2 = styled.div`
+  display: flex;
+  padding-top: 20px;
+  padding-left: 20px;
+`;
+
+const Main = styled.div`
+  flex: 7;
+
+  
+`;
+const Container3 = styled.div`
+  display: flex;
+  gap: 24px;
+  padding: 5px;
+`;
+
+const Content = styled.div`
+  flex: 5;
+`;
 
 // A single subscription card component
 const SubscriptionCard = ({ creator }) => (
+    <Link to='/creatorchannel/:id' style={{textDecoration:"none",color:"inherit"}}>
+
     <Card sx={{ maxWidth: 345 , height:350 }}>
         <CardMedia
             component="img"
@@ -44,6 +69,7 @@ const SubscriptionCard = ({ creator }) => (
             <Divider />
         </CardContent>
     </Card>
+    </Link>
 );
 
 
@@ -61,19 +87,34 @@ const SubscriptionPage = () => {
     }, []);
 
     return (
-        <Container sx={{mt:'40px'}} >
+    <Container2>
+                
+            
+        {/* <Container sx={{mt:'40px'}} > */}
             
             <ChildSide/>
+            {/* <ResponsiveContainer width="100%"> */}
+
+            <Main>
+
+             {/* <Container3>
+             <Content> */} 
+
+  
             {/* to be ADDED  W SHEEL EL BOX EL*/}
-            <Grid container spacing={8}sx={{ paddingTop: '80px' }}>
-                {subscriptions.map((subscription, index) => (
-                    <Grid item key={index} xs={12} sm={6} md={3} >
-                        <SubscriptionCard creator={subscription}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
+                <Grid container spacing={8}sx={{ paddingTop: '80px' }}>
+                    {subscriptions.map((subscription, index) => (
+                        <Grid item key={index} xs={12} sm={6} md={3} >
+                        <SubscriptionCard creator={subscription}/>
+                        </Grid>
+                    ))}
+                </Grid>
+                    {/* </Content>
+                    </Container3>  */} 
+                    </Main> 
+                    {/* </ResponsiveContainer> */}
+        {/* </Container> */}
+    </Container2>
     );
 };
 

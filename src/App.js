@@ -7,6 +7,9 @@ import AuthPage from './pages/Auth';
 import Creators from './pages/Creators';
 import Profiles from './pages/Profiles';
 import AddChild from './pages/AddChild';
+import CreatorChannel from './pages/CreatorChannel';
+import Graphs from './pages/Graphs';
+import Uppage from './pages/UpPage';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -39,12 +42,15 @@ function App() {
           
 
         <Routes>
-          <Route path="/" element={<AuthPage/>} />
+          <Route path="/" element={<Graphs/>} />
           <Route path="video/:id" element={<Video/>} />
           <Route path="/creators" element={<Creators/>} />
           <Route path="/login" element={<AuthPage/>} />
           <Route path="/profiles" element={<Profiles/>} />
           <Route path="/videos" element={<Home/>} />
+          <Route path="/addchild" element={<AddChild/>} />
+          <Route path="/creatorchannel/:id" element={<CreatorChannel/>} />
+          <Route path="/upload" element={<Uppage/>} />
         </Routes>
 
           

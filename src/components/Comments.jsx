@@ -38,6 +38,9 @@ const Comments = ({comments}) => {
       <NewComment>
         <Avatar src={child.imageURL} />
         <Input placeholder="Add a comment..." />
+        <button>
+          <SendIcon />
+        </button>
         <SendIcon />
       </NewComment>
       {comments && comments.map((comment) => (

@@ -77,14 +77,13 @@ function Profile() {
         setId('');
         setOpen(false);
     };
-
-    const handleConfirm = () => {
+    const handleConfirm = async() => {
         if(selected != null && selected.PIN.toString() == id) {
             setId('');
             setOpen(false);
             
             // create new cookie with child info
-            Cookies.set('child', JSON.stringify(selected));
+            await Cookies.set('child', JSON.stringify(selected));
             
             selected = null;
             window.location.href = '/videos';
@@ -92,7 +91,7 @@ function Profile() {
     };
 
     const handleAddChild = () => {
-        window.location.href = '/AddChild';
+        window.location.href = '/addchild';
         setChildren([...children, { id: id }]);
         setId('');
     };
