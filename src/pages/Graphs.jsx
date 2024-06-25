@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import WeeklyHoursChart from '../components/weeklyhrschart';
 import styled from 'styled-components';
 import ParentNav from '../components/ParentNav';
-import { db } from '../utils/firebaseinit';
 import Cookies from 'js-cookie';
 import { Single_user_fetch } from '../utils/Single_user_fetch';
 
@@ -30,6 +29,7 @@ const Graphs = () => {
   const [children, setChildren] = useState([]);
 
   useEffect(()=>{
+    sessionStorage.removeItem('child');
     const parentID = Cookies.get('token');
     if (parent === null){
       loadData(setChildren, setParent, parentID);

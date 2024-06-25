@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Avatar, Fab, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -58,7 +58,8 @@ function Profile() {
     const [children, setChildren] = useState([]);
     const [Parent, setParent] = useState(null);
 
-    let UID = Cookies.get('token')
+    let UID = Cookies.get('token');
+    
     if (Parent === null){
         loadData(setChildren, setParent, UID);
     }
@@ -105,7 +106,6 @@ function Profile() {
 
 
     return (
-
         <div style={{ position: 'relative', backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png")', width: '100vw', height: '100vh' }}>
         {Parent && (
           <Grid container spacing={2} justifyContent="center">

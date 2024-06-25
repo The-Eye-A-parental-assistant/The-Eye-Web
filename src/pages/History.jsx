@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Avatar, Typography, Box, CssBaseline } from '@mui/material';
+import { Grid, Typography, Box, CssBaseline } from '@mui/material';
 import "./CreatorChannel.css";
 import ChildSide from "../components/ChildSide";
 import styled from 'styled-components';
+import { Single_user_fetch } from '../utils/Single_user_fetch';
+import { db } from '../utils/firebaseinit';
+import { getDoc, doc } from 'firebase/firestore';
+import historyGenerator from '../utils/HistoryGenerator';
+import { Link } from 'react-router-dom';
 
 const Container2 = styled.div`
   display: flex;
@@ -21,63 +26,50 @@ const Content = styled(Box)`
   text-align: center;
 `;
 
-const VideoCard = ({ image, title, description }) => {
+const VideoCard = ({ videoid, image, title, description, date }) => {
     return (
-        <div className="video-card" >
-            <img src={image} alt={title} className="video-image" />
-            <div className="video-info">
-                <h3 className="video-title">{title}</h3>
-                <p className="video-description">{description}</p>
+        <Link to={`/video/${videoid}`} style={{ textDecoration: 'none' }}>
+            <div className="video-card" >
+                <img src={image} alt={title} className="video-image" />
+                <div className="video-info">
+                    <h3 className="video-title">{title}</h3>
+                    <p className="video-description">{description}</p>
+                    <br />
+                    <h5>{historyGenerator(date)}</h5>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
 const App = () => {
     const [videos, setVideos] = useState([]);
+    const [id, setId] = useState(sessionStorage.getItem('child'));
 
     useEffect(() => {
-        const fetchedVideos = [
-            {
-                id: 1,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Scores 2 Goals in Argentina vs. Guatemala Friendly',
-                description: 'Lionel Messi finished with 2 goals and 1 assist for Argentina in their friendly vs. Guatemala ahead of Copa América.',
-            },
-            {
-                id: 2,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 3,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 4,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 5,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-        ];
-        setVideos(fetchedVideos);
+        const fetchedVideos = [];
+
+        Single_user_fetch(id, ()=>{}).then(async (user) => {
+            for (const historyVideo of user.history) {
+                await getDoc(doc(db,'videos',historyVideo.video)).then((doc) => {
+                    const video = doc.data();
+                    fetchedVideos.push({
+                        id: historyVideo.video,
+                        image: video.thumbnail,
+                        title: video.title,
+                        description: video.description,
+                        date: historyVideo.date.toDate(),
+                    });
+                });
+            }
+            setVideos(fetchedVideos);
+        });
     }, []);
 
     return (
    
             <Container2>
-
             <ChildSide/>
-
             <Main>
 
 
@@ -85,24 +77,25 @@ const App = () => {
             <div className="App">
                 <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
                     <Content>
-                            <Typography variant="h3" component="div" sx={{ fontWeight: 'bold',fontFamily:'cursive',textAlign:'center' }}>History</Typography>
-                            
-                        </Content>
-                    
+                        <Typography variant="h3" component="div" sx={{ fontWeight: 'bold',fontFamily:'cursive',textAlign:'center' }}>History</Typography>
+                    </Content>
                 </Grid>
+
                 <div justifyContent="center" alignItems="center" style={{ marginTop: '-42%'  }} >
                 {videos.map((video) => (
                     <VideoCard
                     key={video.id}
+                    videoid={video.id}
                     image={video.image}
                     title={video.title}
                     description={video.description}
+                    date={video.date}
                     />
                 ))}
                 </div>
             </div>
             </Main>
-                </Container2>
+            </Container2>
     );
 };
 

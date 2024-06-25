@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Avatar, Typography, Box, CssBaseline } from '@mui/material';
+import { Grid, Typography, Box, CssBaseline } from '@mui/material';
 import "./CreatorChannel.css";
-import ChildSide from "../components/ChildSide";
 import styled from 'styled-components';
 import { Single_user_fetch } from '../utils/Single_user_fetch';
 import { db } from '../utils/firebaseinit';
 import { getDoc, doc } from 'firebase/firestore';
+import historyGenerator from '../utils/HistoryGenerator';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Container2 = styled.div`
@@ -25,7 +26,7 @@ const Content = styled(Box)`
   text-align: center;
 `;
 
-const VideoCard = ({ videoid, image, title, description }) => {
+const VideoCard = ({ videoid, image, title, description, date }) => {
     return (
         <Link to={`/video/${videoid}`} style={{ textDecoration: 'none' }}>
             <div className="video-card" >
@@ -33,6 +34,8 @@ const VideoCard = ({ videoid, image, title, description }) => {
                 <div className="video-info">
                     <h3 className="video-title">{title}</h3>
                     <p className="video-description">{description}</p>
+                    <br />
+                    <h5>{historyGenerator(date)}</h5>
                 </div>
             </div>
         </Link>
@@ -41,20 +44,21 @@ const VideoCard = ({ videoid, image, title, description }) => {
 
 const App = () => {
     const [videos, setVideos] = useState([]);
-    const [id, setId] = useState(sessionStorage.getItem('child'));
+    const { id } = useParams();
 
     useEffect(() => {
         const fetchedVideos = [];
 
         Single_user_fetch(id, ()=>{}).then(async (user) => {
-            for (const video of user.dislikes) {
-                await getDoc(doc(db,'videos',video)).then((doc) => {
-                    const data = doc.data();
+            for (const historyVideo of user.history) {
+                await getDoc(doc(db,'videos',historyVideo.video)).then((doc) => {
+                    const video = doc.data();
                     fetchedVideos.push({
-                        id: video,
-                        image: data.thumbnail,
-                        title: data.title,
-                        description: data.description,
+                        id: historyVideo.video,
+                        image: video.thumbnail,
+                        title: video.title,
+                        description: video.description,
+                        date: historyVideo.date.toDate(),
                     });
                 });
             }
@@ -65,9 +69,6 @@ const App = () => {
     return (
    
             <Container2>
-
-            <ChildSide/>
-
             <Main>
 
 
@@ -75,11 +76,10 @@ const App = () => {
             <div className="App">
                 <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
                     <Content>
-                            <Typography variant="h3" component="div" sx={{ fontWeight: 'bold',fontFamily:'cursive',textAlign:'center',paddingLeft:'30px' }}>Disliked Videos</Typography>
-                            
-                        </Content>
-                    
+                        <Typography variant="h3" component="div" sx={{ fontWeight: 'bold',fontFamily:'cursive',textAlign:'center' }}>History</Typography>
+                    </Content>
                 </Grid>
+
                 <div justifyContent="center" alignItems="center" style={{ marginTop: '-42%'  }} >
                 {videos.map((video) => (
                     <VideoCard
@@ -88,12 +88,13 @@ const App = () => {
                     image={video.image}
                     title={video.title}
                     description={video.description}
+                    date={video.date}
                     />
                 ))}
                 </div>
             </div>
             </Main>
-                </Container2>
+            </Container2>
     );
 };
 

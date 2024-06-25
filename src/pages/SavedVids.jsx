@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Avatar, Typography, Box, CssBaseline } from '@mui/material';
+import { Grid, Typography, Box, CssBaseline } from '@mui/material';
 import "./CreatorChannel.css";
 import ChildSide from "../components/ChildSide";
 import styled from 'styled-components';
+import { Single_user_fetch } from '../utils/Single_user_fetch';
+import { db } from '../utils/firebaseinit';
+import { getDoc, doc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 
 const Container2 = styled.div`
   display: flex;
@@ -21,55 +25,42 @@ const Content = styled(Box)`
   text-align: center;
 `;
 
-const VideoCard = ({ image, title, description }) => {
+const VideoCard = ({ videoid, image, title, description }) => {
     return (
-        <div className="video-card" >
-            <img src={image} alt={title} className="video-image" />
-            <div className="video-info">
-                <h3 className="video-title">{title}</h3>
-                <p className="video-description">{description}</p>
+        <Link to={`/video/${videoid}`} style={{ textDecoration: 'none' }}>
+            <div className="video-card">
+                <img src={image} alt={title} className="video-image" />
+                <div className="video-info">
+                    <h3 className="video-title">{title}</h3>
+                    <p className="video-description">{description}</p>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
 const App = () => {
     const [videos, setVideos] = useState([]);
+    const [id, setId] = useState(sessionStorage.getItem('child'));
 
     useEffect(() => {
-        const fetchedVideos = [
-            {
-                id: 1,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Scores 2 Goals in Argentina vs. Guatemala Friendly',
-                description: 'Lionel Messi finished with 2 goals and 1 assist for Argentina in their friendly vs. Guatemala ahead of Copa América.',
-            },
-            {
-                id: 2,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 3,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 4,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-            {
-                id: 5,
-                image: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg',
-                title: 'Lionel Messi Masterclass Vs Guatemala 2024 - Friendly',
-                description: 'Messi’s incredible performance in the friendly match against Guatemala. Argentina won 4-1.',
-            },
-        ];
-        setVideos(fetchedVideos);
+        const fetchedVideos = [];
+
+        Single_user_fetch(id, ()=>{}).then(async (user) => {
+            for (const video of user.favourites) {
+                await getDoc(doc(db,'videos',video)).then((doc) => {
+                    const data = doc.data();
+                    console.log(video);
+                    fetchedVideos.push({
+                        id: video,
+                        image: data.thumbnail,
+                        title: data.title,
+                        description: data.description,
+                    });
+                });
+            }
+            setVideos(fetchedVideos);
+        });
     }, []);
 
     return (
@@ -94,6 +85,7 @@ const App = () => {
                 {videos.map((video) => (
                     <VideoCard
                     key={video.id}
+                    videoid={video.id}
                     image={video.image}
                     title={video.title}
                     description={video.description}

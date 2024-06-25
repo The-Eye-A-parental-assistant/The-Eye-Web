@@ -132,7 +132,7 @@ const Graphcontainer = styled.div`
           </ContentButtons>
           <ButtonContainer>
             
-            <WatchHistoryButton>
+            <WatchHistoryButton onClick={()=>{window.location.href = `childhistory/${child.id}`}}>
                         <HistoryIcon style={{ fontSize: 'small' }}/>
                         Watch History
             </WatchHistoryButton>

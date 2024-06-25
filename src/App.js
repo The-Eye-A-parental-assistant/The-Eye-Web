@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import Menu from './components/Menu';
-import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Video from './pages/Video';
 import AuthPage from './pages/Auth';
@@ -11,6 +9,7 @@ import CreatorChannel from './pages/CreatorChannel2';
 import Graphs from './pages/Graphs';
 import Uppage from './pages/UpPage';
 import History from './pages/History';
+import ChildHistory from './pages/HistoryParent';
 import LikedVids from './pages/LikedVids';
 import DislikedVids from './pages/DislikedVids';
 import SavedVids from './pages/SavedVids';
@@ -58,6 +57,7 @@ function App() {
           <Route path="/upload" element={<Uppage/>} />
           
           <Route path="/history" element={<History/>} />
+          <Route path="/childhistory/:id" element={<ChildHistory/>} />
           <Route path="/likedvids" element={<LikedVids/>} />
           <Route path="/dislikedvids" element={<DislikedVids/>} />
           <Route path="/saved" element={<SavedVids/>} />
