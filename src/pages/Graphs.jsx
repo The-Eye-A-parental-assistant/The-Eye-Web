@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import WeeklyHoursChart from '../components/weeklyhrschart';
 import styled from 'styled-components';
 import ParentNav from '../components/ParentNav';
+import { db } from '../utils/firebaseinit';
+import Cookies from 'js-cookie';
+import { Single_user_fetch } from '../utils/Single_user_fetch';
 
 
 const Wrapper = styled.div`
@@ -9,16 +12,29 @@ const Wrapper = styled.div`
   padding-top: 60px;
   `;
 
+async function loadData(setChildren, setParent, UID) {
+  let Parent = await Single_user_fetch(UID,setParent);
+
+  const children = Parent.children;
+
+  const childrenData = [];
+  for (const child of children) {
+    let childData = await Single_user_fetch(child,()=>{});
+    childrenData.push(childData);
+  }
+  setChildren(childrenData);
+}
+
 const Graphs = () => {
-  const [data, setData] = useState([
-    { name: 'Sunday', hours: 8 },
-    { name: 'Monday', hours: 7 },
-    { name: 'Tuesday', hours: 6 },
-    { name: 'Wednesday', hours: 5 },
-    { name: 'Thursday', hours: 8 },
-    { name: 'Friday', hours: 10 },
-    { name: 'Saturday', hours: 4 },
-  ]);
+  const [parent, setParent] = useState(null);
+  const [children, setChildren] = useState([]);
+
+  useEffect(()=>{
+    const parentID = Cookies.get('token');
+    if (parent === null){
+      loadData(setChildren, setParent, parentID);
+    }
+  });
 
  
   ///////////////////////////////////////////////////////////////////////////
@@ -28,10 +44,7 @@ const Graphs = () => {
     <Wrapper>
     <ParentNav/>
     <div>
-      <WeeklyHoursChart data={data} />
-      <WeeklyHoursChart data={data} />
-      <WeeklyHoursChart data={data} />
-
+      {children.map((child) => <WeeklyHoursChart key={child.id} data={child} />)}
     </div>
         </Wrapper>
   );

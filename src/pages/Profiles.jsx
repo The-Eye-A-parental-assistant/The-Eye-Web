@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Cookies from 'js-cookie';
 import { Single_user_fetch } from '../utils/Single_user_fetch';
+import Child from '../models/Child';
 
 
 //  styles for Avatar
@@ -82,10 +83,15 @@ function Profile() {
             setId('');
             setOpen(false);
 
-            // create new cookie with child info
-            sessionStorage.setItem('child', selected.id);
-            selected = null;
-            window.location.href = '/videos';
+            if (selected instanceof Child) {
+                // create new session with child id
+                sessionStorage.setItem('child', selected.id);
+                selected = null;
+                window.location.href = '/videos';
+            } else {
+                selected = null;
+                window.location.href = '/parent';
+            }
         }
     };
 

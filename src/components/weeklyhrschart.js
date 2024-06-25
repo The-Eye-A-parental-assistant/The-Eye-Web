@@ -1,4 +1,3 @@
-import { Padding } from '@mui/icons-material';
 import React, { useState } from 'react';
 import {
   LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,Area
@@ -6,7 +5,10 @@ import {
 import HistoryIcon from '@mui/icons-material/History';
 import LockIcon from '@mui/icons-material/Lock';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import adaptorScreenTime from '../utils/adaptorScreenTime';
+import adaptorFlags from '../utils/adaptorFlags';
+import updateChild from '../utils/updateChild';
+import adaptorDatabaseFlags from '../utils/adaptorDatabaseFlags';
 
 import styled from 'styled-components';
 const Wrapper = styled.div`
@@ -98,29 +100,25 @@ const Graphcontainer = styled.div`
         `;
 
   const WeeklyHoursChart = ({ data }) => {
-    const [allowedContent, setAllowedContent] = useState({
-      Nudity: false,
-      Violence: false,
-      Weapons: false,
-      LGBTQ: false,
-      Disgusting: false,
-      Sexual: false,
-      Blood: false,
-    });
+    const [child, setChild] = useState(data);
+    const [allowedContent, setAllowedContent] = useState(adaptorFlags(child.prefs));
 
     const handleContentChange = (content) => {
       setAllowedContent({
           ...allowedContent,
           [content]: !allowedContent[content],
       });
+      
+      updateChild(child.id, {screentime: adaptorDatabaseFlags({...allowedContent, [content]: !allowedContent[content]})});
   };
-  
-    return (
 
-<Graphcontainer>
+  
+  return (
+    
+    <Graphcontainer>
         <ProfileContainer>
-          <ProfileImage src='https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg' alt="Profile Photo" />
-          <ProfileName>John Doe</ProfileName>
+          <ProfileImage src={child.imageURL} alt="Profile Photo" />
+          <ProfileName> {child.name} </ProfileName>
           <ContentButtons>
             {Object.keys(allowedContent).map((content) => (
               <ContentButton
@@ -157,7 +155,7 @@ const Graphcontainer = styled.div`
         </ProfileContainer>
         <ResponsiveContainer width="100%" height={400}>
           
-        <LineChart data={data}>
+        <LineChart data={adaptorScreenTime(child.screenTime)}>
         <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis domain={[0, 24]} ticks={[0, 4, 8, 12, 16, 20, 24]} />
