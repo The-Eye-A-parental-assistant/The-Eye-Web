@@ -16,7 +16,9 @@ export async function Single_user_fetch(id, setUser) {
     setUser(Creator.fromFirestore(userSnapshot));
     return Creator.fromFirestore(userSnapshot);
   }
-
-  setUser(Parent.fromFirestore(userSnapshot));
-  return Parent.fromFirestore(userSnapshot);
+  if (userSnapshot.data().role === 'parent') {
+    setUser(Parent.fromFirestore(userSnapshot));
+    return Parent.fromFirestore(userSnapshot);
+  }
+  return undefined;
 }

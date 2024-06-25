@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import Menu from './components/Menu';
-import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Video from './pages/Video';
 import AuthPage from './pages/Auth';
@@ -12,6 +10,7 @@ import CreatorChannelCREATOR from './pages/CreatorChannel_creator';
 import Graphs from './pages/Graphs';
 import Uppage from './pages/UpPage';
 import History from './pages/History';
+import ChildHistory from './pages/HistoryParent';
 import LikedVids from './pages/LikedVids';
 import DislikedVids from './pages/DislikedVids';
 import SavedVids from './pages/SavedVids';
@@ -48,8 +47,10 @@ function App() {
           
 
         <Routes>
-          <Route path="/" element={<Graphs/>} />
-
+          <Route path="/" element={<AuthPage/>} />
+          <Route path="/parent" element={<Graphs/>} />
+          <Route path="video/:id" element={<Video/>} />
+          <Route path="/creators" element={<Creators/>} />
           <Route path="/login" element={<AuthPage/>} />
           <Route path="/profiles" element={<Profiles/>} />
 
@@ -58,8 +59,12 @@ function App() {
           <Route path="video/:id" element={<Video/>} />
 
           <Route path="/videos" element={<Home/>} />
+          <Route path="/addchild" element={<AddChild/>} />
+          <Route path="/creator/:id" element={<CreatorChannel/>} />
+          <Route path="/upload" element={<Uppage/>} />
           
           <Route path="/history" element={<History/>} />
+          <Route path="/childhistory/:id" element={<ChildHistory/>} />
           <Route path="/likedvids" element={<LikedVids/>} />
           <Route path="/dislikedvids" element={<DislikedVids/>} />
           <Route path="/saved" element={<SavedVids/>} />

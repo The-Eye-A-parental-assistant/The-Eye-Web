@@ -1,23 +1,11 @@
 import React from "react";
 import styled from 'styled-components';
 import Card from "../components/Card";
-import Menu from "../components/Menu";
 import ChildSide from "../components/ChildSide";
-import Navbar from "../components/Navbar";
 import {video_fetch} from "../utils/video_fetch";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
-import Child from "../models/Child";
+import {Single_user_fetch} from "../utils/Single_user_fetch";
 
-
-// const Container = styled.div`
-// width: 100%;
-// display: flex;
-// justify-content: space-evenly;
-// flex-wrap:wrap;
-// overflow: hidden;
-
-// `
 
 const CardContainer = styled.div`
   display: flex;
@@ -39,12 +27,14 @@ const Wrapper = styled.div`
 
 `;
 const Home = () => {
-  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [videos, setVideo] = useState([]);
   
   useEffect(() => {
-    if (child) {
-      video_fetch(setVideo, child.prefs)
+    const childID = sessionStorage.getItem('child');
+    if (childID) {
+      Single_user_fetch(childID, ()=>{}).then((child) => video_fetch(setVideo, child.prefs));
+    }else{
+      alert('Please login to view this page');
     }
   }, []);
 
@@ -62,6 +52,7 @@ const Home = () => {
       {videos.map(video => (
         <Card
         // const Card = ({id,title,thumbnail,creatorID,type})
+        key={video.id}
         id={video.id} 
         title={video.title}
         thumbnail={video.thumbnail}

@@ -5,13 +5,11 @@ import {video_fetch} from "../utils/video_fetch";
 import { useEffect, useState } from "react";
 import {Single_video_fetch} from '../utils/Single_video_fetch';
 import { useParams } from 'react-router-dom';
-import Menu from '../components/Menu';
-
-import Navbar from '../components/Navbar';
-import Cookies from 'js-cookie';
 import Child from "../models/Child";
-
-import SendIcon from '@mui/icons-material/Send';
+import updateChild from '../utils/updateChild'
+import { Timestamp, arrayUnion, arrayRemove } from "firebase/firestore";
+import { Single_user_fetch } from "../utils/Single_user_fetch";
+import incrementViews from "../utils/incrementViews";
 
 
 //msh ma3mol
@@ -33,6 +31,7 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import Comments from "../components/Comments";
 import historyGenerator from "../utils/HistoryGenerator";
 import ChildSide from "../components/ChildSide";
+import { set } from "firebase/database";
 
 const Container2 = styled.div`
   display: flex;
@@ -42,7 +41,7 @@ const Container2 = styled.div`
 const Main = styled.div`
   flex: 7;
 
-  
+
 `;
 const Wrapper = styled.div`
 //  padding: 22px 96px;
@@ -75,7 +74,7 @@ const Details = styled.div`
 `;
 
 const Info = styled.span`
-color: Gray;  
+color: Gray;
 `;
 
 const Buttons = styled.div`
@@ -150,26 +149,46 @@ const Subscribe = styled.button`
 
 const Video = () => {
   // window.location.reload(false);
-  
+  const { id } = useParams();
+
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState([]);
-  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [creator, setCreator] = useState([]);
 
   const [thumbUpClicked, setThumbUpClicked] = useState(false);
   const [thumbDownClicked, setThumbDownClicked] = useState(false);
   const [bookmarkClicked, setBookmarkClicked] = useState(false);
+  const [disbled, setDisabled] = useState(true);
+  const [childID, setChildID] = useState(null);
 
   // const urlParams = new URLSearchParams(window.location.search);
   // const id = urlParams.get('id');
-  const { id } = useParams();
 
   useEffect(() => {
+    incrementViews(id);
     Single_video_fetch(id,setVideo,setCreator)
     .then((video) => {
-      console.log(video);
-      video_fetch(setVideos, video.tags, video.videoURL)
-    })
+      video_fetch(setVideos, video.tags, video.videoURL);
+    });
+
+    const childsessionID = sessionStorage.getItem('child');
+    
+    if (childsessionID === null || childsessionID === undefined || childsessionID === '') {
+      setDisabled(true);
+      return;
+    }
+    
+    Single_user_fetch(childsessionID, ()=>{}).then((data) => {
+      if (data instanceof Child) {
+        setDisabled(false);
+        setThumbDownClicked(data.dislikes.includes(id));
+        setThumbUpClicked(data.likes.includes(id));
+        setBookmarkClicked(data.favourites.includes(id));
+        const now = Timestamp.now();
+        updateChild(childsessionID, {history: arrayUnion({video: id, date: now})});
+      }
+    });
+    setChildID(childsessionID);
   }, [id]);
 
   const handleCopyLink = () => {
@@ -181,56 +200,71 @@ const Video = () => {
   };
 
   const handleThumbUpClick = () => {
+    if (thumbUpClicked === false) // will become true
+      updateChild(childID, {likes: arrayUnion(id), dislikes: arrayRemove(id)});
+    else
+      updateChild(childID, {likes: arrayRemove(id)});
+    
     setThumbUpClicked(!thumbUpClicked);
+    setThumbDownClicked(false);
   };
 
   const handleThumbDownClick = () => {
+    if (thumbDownClicked === false) // will become true
+      updateChild(childID, {dislikes: arrayUnion(id), likes: arrayRemove(id)});
+    else
+      updateChild(childID, {dislikes: arrayRemove(id)});
+    
     setThumbDownClicked(!thumbDownClicked);
-  };
+    setThumbUpClicked(false);
+};
 
   const handleBookmarkClick = () => {
+    if (bookmarkClicked === false) // will become true
+      updateChild(childID, {favourites: arrayUnion(id)});
+    else
+      updateChild(childID, {favourites: arrayRemove(id)});
+    
     setBookmarkClicked(!bookmarkClicked);
   };
   return (
     <Container2>
       {/* <Menu /> */}
-      <ChildSide/> 
+      <ChildSide/>
       <Main>
       {/* <Navbar/> */}
   <Container>
     <Content>
       <VideoWrapper>
-      
-
         <video
-      width="100%"
-      height="520"
-      controls
-      autoPlay
-      poster={video.thumbnail}
-      key={video.videoURL}
-    >
+          width="100%"
+          height="520"
+          controls
+          autoPlay
+          poster={video.thumbnail}
+          key={video.videoURL}
+        >
       <source src={video.videoURL} type="video/mp4"/>
       Your browser does not support the video tag.
     </video>
-
       </VideoWrapper>
+
       <Title>{video.title}</Title>
       <Details>
           <Info>{video.views} views • {historyGenerator(video.date)}</Info>
 
           <Buttons></Buttons>
           <Buttons>
-          
-      <Button onClick={handleThumbUpClick}>
-        {thumbUpClicked ? <ThumbUpAltOutlinedIcon /> : <ThumbUpIcon style={{color: '#8ED197'}}/>}Like
+
+      <Button onClick={disbled ? undefined : handleThumbUpClick} >
+        {thumbUpClicked ? <ThumbUpIcon style={{color: '#8ED197'}}/> : <ThumbUpAltOutlinedIcon />}Like
       </Button>
-      <Button onClick={handleThumbDownClick}>
-        {thumbDownClicked ? <ThumbDownOutlinedIcon /> : <ThumbDownIcon style={{color: '#8ED197'}} />}Dislike
+      <Button onClick={disbled ? undefined : handleThumbDownClick}>
+        {thumbDownClicked ? <ThumbDownIcon style={{color: '#8ED197'}} /> : <ThumbDownOutlinedIcon />}Dislike
       </Button>
       <Button onClick={handleCopyLink}><ReplyOutlinedIcon/>Share</Button>
-      <Button onClick={handleBookmarkClick}>
-        {bookmarkClicked ? <BookmarkAddOutlinedIcon /> : <BookmarkAddedIcon style={{color: '#8ED197'}}/>}Save
+      <Button onClick={disbled ? undefined : handleBookmarkClick}>
+        {bookmarkClicked ? <BookmarkAddedIcon style={{color: '#8ED197'}}/> : <BookmarkAddOutlinedIcon />}Save
       </Button>
 
           </Buttons>
@@ -253,14 +287,13 @@ const Video = () => {
     </Content>
 
     <Recommendation>
-    
+
 
 {videos.map(video => (
          <Card
-         // const Card = ({id,title,thumbnail,creatorID,type})
-         id={video.id} 
+         key={video.id}
+         id={video.id}
          title={video.title}
-
          thumbnail={video.thumbnail}
          creatorID={video.creatorID}
          type='sm'

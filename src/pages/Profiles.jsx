@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Avatar, Fab, TextField, Typography } from '@mui/material';
-import { styled } from '@mui/system'; 
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'; 
+import { styled } from '@mui/system';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Cookies from 'js-cookie';
 import { Single_user_fetch } from '../utils/Single_user_fetch';
+import Child from '../models/Child';
 
 
 //  styles for Avatar
 const CustomAvatar = styled(Avatar)(({ theme }) => ({
-    width: theme.spacing(20), 
-    height: theme.spacing(20), 
-    border: '12px solid #8ED197', 
-    borderRadius: '50%', 
-    margin: theme.spacing(7), 
+    width: theme.spacing(20),
+    height: theme.spacing(20),
+    border: '12px solid #8ED197',
+    borderRadius: '50%',
+    margin: theme.spacing(7),
 }));
 
 //  styles for DialogContent
@@ -25,22 +26,22 @@ const CustomDialogContent = styled(DialogContent)({
 
 const AddChildFab = styled(Fab)({
     position: 'absolute',
-    bottom: '20px', 
-    right: '20px', 
-    backgroundColor: '#8ED197', 
-    color: '#fff', 
-    width: '80px', 
-    height: '80px', 
-    borderRadius: '50%', 
-    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)', 
+    bottom: '20px',
+    right: '20px',
+    backgroundColor: '#8ED197',
+    color: '#fff',
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
 });
 
 
  async function loadData(setChildren, setParent, UID) {
     let Parent = await Single_user_fetch(UID,setParent);
-    
+
     const children = Parent.children;
-    
+
     const childrenData = [];
     for (const child of children) {
         childrenData.push(await Single_user_fetch(child,setChildren));
@@ -57,7 +58,8 @@ function Profile() {
     const [children, setChildren] = useState([]);
     const [Parent, setParent] = useState(null);
 
-    let UID = Cookies.get('token')
+    let UID = Cookies.get('token');
+    
     if (Parent === null){
         loadData(setChildren, setParent, UID);
     }
@@ -81,19 +83,21 @@ function Profile() {
         if(selected != null && selected.PIN.toString() == id) {
             setId('');
             setOpen(false);
-            
-            // create new cookie with child info
-            await Cookies.set('child', JSON.stringify(selected));
-            
-            selected = null;
-            window.location.href = '/videos';
+
+            if (selected instanceof Child) {
+                // create new session with child id
+                sessionStorage.setItem('child', selected.id);
+                selected = null;
+                window.location.href = '/videos';
+            } else {
+                selected = null;
+                window.location.href = '/parent';
+            }
         }
     };
 
     const handleAddChild = () => {
         window.location.href = '/addchild';
-        setChildren([...children, { id: id }]);
-        setId('');
     };
 
     const handleChange = (event) => {
@@ -102,7 +106,6 @@ function Profile() {
 
 
     return (
-        
         <div style={{ position: 'relative', backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png")', width: '100vw', height: '100vh' }}>
         {Parent && (
           <Grid container spacing={2} justifyContent="center">
@@ -116,12 +119,12 @@ function Profile() {
           </Grid>
         )}
 
-            
+
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Confirm ID</DialogTitle>
                 {/* <Typography>Name</Typography> */}
                 <CustomDialogContent>
-                    <CustomAvatar src="child_avatar.jpg" />
+                    <CustomAvatar src={selected != null ? selected.imageURL : "child_avatar.jpg"} />
                     <TextField
                         value={id}
                         onChange={handleChange}
@@ -141,13 +144,13 @@ function Profile() {
                     />
                 </CustomDialogContent>
                 <DialogActions>
-                    
+
                     <Button onClick={handleConfirm} variant="contained" style={{ backgroundColor: '#8ED197' }}>Confirm</Button>
                 </DialogActions>
             </Dialog>
 
             {/* Button to Add a Child */}
-            
+
             <AddChildFab onClick={handleAddChild}>
                 <PersonAddAlt1Icon />
             </AddChildFab>

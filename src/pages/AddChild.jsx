@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import AddIcon from '@mui/icons-material/Add';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import defaultprofile from '../img/img9.jpg';
+import { db } from '../utils/firebaseinit';
+import { doc, collection, addDoc, Timestamp, updateDoc, arrayUnion } from "firebase/firestore";
+import Cookies from 'js-cookie';
+import uploadImage from '../utils/uploadImage';
+import adaptorDatabaseFlags from '../utils/adaptorDatabaseFlags';
+
 const FormWrapper = styled.div`
     background-image: url("https://www.transparenttextures.com/patterns/robots.png");
     padding: 20px;
@@ -99,9 +104,48 @@ const FormWrapper = styled.div`
         border-color: #4caf50;
     `;
     
-    const handleSubmit = () => {
-    // Add logic to handle form submission and add the child
-};
+    const handleSubmit = async(prefs, gender, name, birthdate, PIN, imageURL) => {
+        const placeholderImage = 'https://firebasestorage.googleapis.com/v0/b/the-eye-66e7b.appspot.com/o/App%20Assets%2Fprofile_placeholder.png?alt=media&token=8df99a81-51ab-488b-b0e6-335069e161c9';
+        
+        if (PIN.length !== 4  && isNaN(PIN)) {
+            alert('PIN must be 4 numbers');
+            return;
+        }
+
+        if (gender === '') {
+            alert('Please choose gender');
+            return;
+        }
+
+        const ParentUID = Cookies.get('token');
+        const docData = {
+            PIN: parseInt(PIN),
+            gender,
+            name,
+            imageURL: placeholderImage,
+            parentID: ParentUID,
+            birthDate: Timestamp.fromDate(new Date(birthdate)),
+            history: [],
+            likes: [],
+            dislikes: [],
+            favourites: [],
+            prefs: adaptorDatabaseFlags(prefs),
+            screenTime: {sun: 0, mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0},
+            role: 'child',
+        };
+        const docRef = await addDoc(collection(db, "users"), docData);
+        await updateDoc(doc(db, "users", ParentUID), {children: arrayUnion(docRef.id)});
+
+        if (imageURL !== '') {
+            // upload image to firebase storage and get link
+            // imageURL = await uploadImage();
+
+            // update doc with imageURL
+            // await updateDoc(docRef, {imageURL: imageURL});   
+        }
+
+        window.location.href = '/profiles';
+    };
 
 
    
@@ -109,6 +153,10 @@ const FormWrapper = styled.div`
     
     const AddAccountForm = () => {
         const [gender, setGender] = useState('');
+        const [name, setName] = useState('');
+        const [birthdate, setDate] = useState();
+        const [PIN, setPIN] = useState('');
+        const [imageURL, setImageURL] = useState('');
         const [allowedContent, setAllowedContent] = useState({
             Nudity: false,
             Violence: false,
@@ -138,14 +186,12 @@ const FormWrapper = styled.div`
 
     return (
         <FormWrapper>   
-
         <AddAccountFormContainer>
-            <BackButton><ArrowBackIosNewIcon /></BackButton>
             <Heading>Add Account</Heading>
             
             <ProfilePicture>
             <ProfileImage src={defaultprofile} />      
-                <Input type="file" />
+                <Input type="file" onChange={(e)=>setImageURL(e.target.value)} />
             </ProfilePicture>
             <GenderSelection>
                 <Label>
@@ -158,10 +204,9 @@ const FormWrapper = styled.div`
                 </Label>
             </GenderSelection>
             <div style={{paddingRight:'20px', margin:'0'}}>
-                <Input type="text" placeholder="Child's Name" />
-                <Input type="date" placeholder="Birth Date" />
-
-                <Input type="password" placeholder="PIN" pattern="[0-9]{4}" title="PIN must be 4 numbers" />
+                <Input type="text" placeholder="Child's Name" onChange={(e)=>setName(e.target.value)}/>
+                <Input type="date" placeholder="Birth Date" onChange={(e)=>setDate(e.target.value)}/>
+                <Input type="password" max={4} placeholder="PIN" title="PIN must be 4 numbers" onChange={(e)=>setPIN(e.target.value)} />
             </div>
            
             <ContentSelection>
@@ -180,7 +225,7 @@ const FormWrapper = styled.div`
                 <SelectButtons>
                     <SelectButton onClick={handleSelectAll}>Select All</SelectButton>
                     
-                    <SelectButton onClick={handleSubmit}>
+                    <SelectButton onClick={() => handleSubmit(allowedContent, gender, name, birthdate, PIN, imageURL)}>
                         <CheckCircleRoundedIcon style={{ fontSize: 'small' }} />
                         Add Child
                     </SelectButton>
@@ -190,7 +235,7 @@ const FormWrapper = styled.div`
             </ContentSelection>
             
         </AddAccountFormContainer>
-                    </FormWrapper>
+        </FormWrapper>
     );
 };
 
