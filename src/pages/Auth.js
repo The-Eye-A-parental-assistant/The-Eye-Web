@@ -90,7 +90,20 @@ function AuthPage() {
                         onChange={handleChange}
                         required 
                         />
-
+                        {formData.role === "parent" && (
+                       <Components.Input 
+                       type='text' 
+                       placeholder='Enter PIN' 
+                       name='parentPin'
+                       value={formData.parentPin}
+                       onChange={handleChange}
+                       maxLength="4"
+                       pattern="\d{4}"
+                       title="PIN must be 4 digits"
+                       inputMode="numeric"
+                       required 
+                   />
+                        )}
                         <Components.RadioContainer>
 
                         <Components.RadioLabel>
@@ -114,6 +127,8 @@ function AuthPage() {
                             <Components.RadioSpan>Parent</Components.RadioSpan>
                         </Components.RadioLabel>
                         </Components.RadioContainer>
+
+                        
 
 
                     <Components.Button type='submit'>Sign Up</Components.Button>

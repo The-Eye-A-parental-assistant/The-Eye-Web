@@ -411,7 +411,7 @@ export default function MiniDrawer() {
                 <List sx={{ backgroundColor: '#8ED197' }}>
                     {[ 'Browse channels'].map((text, index) => (
                         
-                            <Link to='/Creators' style={{textDecoration:"none",color:"inherit"}}>
+                            <Link to='/creators-CH' style={{textDecoration:"none",color:"inherit"}}>
 
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             

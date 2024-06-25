@@ -11,6 +11,20 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AddIcon from '@mui/icons-material/Add';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import SentimentVerySatisfiedSharpIcon from '@mui/icons-material/SentimentVerySatisfiedSharp';
+import styled from 'styled-components';
+import CreatorSide from '../components/CreatorSide';
+
+const Container2 = styled.div`
+  display: flex;
+  padding-top: 80px;
+  padding-left: 20px;
+`;
+
+const Main = styled.div`
+  flex: 7;
+`;
+
+
 
 export default function ButtonAppBar() {
     const handleUserAvatarClick = () => {
@@ -28,8 +42,12 @@ export default function ButtonAppBar() {
     const handleAddButtonClick = () => {
 
     };
-
+    
     return (
+        <Container2>
+        <CreatorSide />
+        <Main>
+
         <Box sx={{ flexGrow: 1 }}>
             <Toolbar sx={{ marginBottom: 10 }}>
                 <IconButton onClick={handleUserAvatarClick} disableFocusRipple disableRipple>
@@ -67,5 +85,7 @@ export default function ButtonAppBar() {
                 </div>
             </Box>
         </Box>
+        </Main>
+        </Container2>
     );
 }

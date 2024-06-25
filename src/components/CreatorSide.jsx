@@ -1,6 +1,8 @@
+
 import * as React from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,35 +14,28 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+// import Profile from './Profiles';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
-import WhatshotIcon from '@mui/icons-material/Whatshot';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import HistoryIcon from '@mui/icons-material/History';
-import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import SettingsIcon from '@mui/icons-material/Settings';
 import FlagIcon from '@mui/icons-material/Flag';
-import HelpIcon from '@mui/icons-material/Help';
 import SmsFailedIcon from '@mui/icons-material/SmsFailed';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import StreamIcon from '@mui/icons-material/Stream';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Avatar from '@mui/material/Avatar';
-import App2 from './SubscriptionCard';
-import Profile from './Profiles';
-import { Grow } from '@mui/material';
-import UpPage from './UpPage'
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+
 // ---------------------------------------------------------------------
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -170,17 +165,19 @@ export default function MiniDrawer() {
     };
 
     return (
-        <Box sx={{
-            display: 'flex',
-            minHeight: '100vh',
-            backgroundColor: '#F0E5FF',
-            backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");',
+        <Box 
+        // sx={{
+        //     display: 'flex',
+        //     minHeight: '40vh',
+        //     backgroundColor: '#F0E5FF',
+            // backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");',
             // url("https://www.transparenttextures.com/patterns/food.png");
             //'url("https://www.transparenttextures.com/patterns/foggy-birds.png");', backgroundColor: '#00a698'
             // url("https://www.transparenttextures.com/patterns/black-scales.png");
             // url("https://www.transparenttextures.com/patterns/cartographer.png");
             //url("https://www.transparenttextures.com/patterns/food.png"); 
-        }}>
+        // }}
+        >
             <CssBaseline />
             <AppBar position="fixed" open={open} sx={{ backgroundColor: '#8ED197' }}>
                 <Toolbar>
@@ -197,6 +194,7 @@ export default function MiniDrawer() {
                         <MenuIcon />
                     </IconButton>
                     <VisibilityIcon sx={{ ml: 2, mr: 2 }} />
+                  
                     <Typography
                         variant="h6"
                         noWrap
@@ -235,65 +233,126 @@ export default function MiniDrawer() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List sx={{ backgroundColor: '#8ED197' }}>
-                    {['My Channel'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {text === 'My Channel' && <HomeIcon />}
-                                    {text === 'Trending' && <WhatshotIcon />}
-                                    {text === 'Subscriptions' && <SubscriptionsIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+                
+               <List sx={{ backgroundColor: '#8ED197' }}>
+    {/* ###################################################################### */}
+    <Link to='/creatorchannel-CR/:id' style={{textDecoration:"none",color:"inherit"}}>
+    <ListItem key='Home' disablePadding sx={{ display: 'block' }}>
+        <ListItemButton
+            sx={{
+                minHeight: 118,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+            }}
+        >
+            <ListItemIcon
+                sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                }}
+            >
+                <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary='Home' sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+    </ListItem>
+    </Link>
+    
+    {/* ###################################################################### */}
+    <Link to='/upload' style={{textDecoration:"none",color:"inherit"}}>
+    <ListItem key='Upload' disablePadding sx={{ display: 'block' }}>
+        <ListItemButton
+            sx={{
+                minHeight: 118,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+            }}
+        >
+            <ListItemIcon
+                sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                }}
+            >
+                <FileUploadIcon />
+            </ListItemIcon>
+            <ListItemText primary='Upload' sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+    </ListItem>
+    </Link>
+        {/* ###################################################################### */}
+        <Link to='/Support' style={{textDecoration:"none",color:"inherit"}}>
+
+        <ListItem key='Contact Support' disablePadding sx={{ display: 'block' }}>
+        <ListItemButton
+            sx={{
+                minHeight: 118,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+            }}
+        >
+            <ListItemIcon
+                sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                }}
+            >
+                <SupportAgentIcon />
+            </ListItemIcon>
+            <ListItemText primary='Contact Support' sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+    </ListItem>
+    </Link>
+        {/* ###################################################################### */}
+
+
+
+</List>
                 <Divider />
+                
+   
                 <List sx={{ backgroundColor: '#8ED197' }}>
-                    {['SUBSCRIPTION', 'Browse channels'].map((text, index) => (
+                    {[ 'Browse channels'].map((text, index) => (
+                        
+                            <Link to='/creators-CR' style={{textDecoration:"none",color:"inherit"}}>
+
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                            
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48,
+                                    minHeight: 118,
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
-                            >
+                                >
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0,
                                         mr: open ? 3 : 'auto',
                                         justifyContent: 'center',
                                     }}
-                                >
+                                    >
                                     {text === 'Browse channels' && <AddCircleOutlineIcon />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
+                                            </Link>
                     ))}
                 </List>
-                <Divider />
                 
+            {/* ###################################################################### */}
+
+                <Divider />
                 <List sx={{ backgroundColor: '#8ED197' }} className='flex-grow-1'>
-                    {['Settings', 'Send feedback'].map((text, index) => (
+                    {['Settings'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48,
+                                    minHeight: 117,
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
@@ -306,19 +365,18 @@ export default function MiniDrawer() {
                                     }}
                                 >
                                     {text === 'Settings' && <SettingsIcon />}
-                                    
-                                    {text === 'Send feedback' && <SmsFailedIcon />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
                     ))}
                 </List>
+               
+                
+              
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");', backgroundColor: '#F0E5FF' }}>
-                <DrawerHeader />
-                <Profile />
-            </Box>
+           
+            
         </Box>
     );
 }
