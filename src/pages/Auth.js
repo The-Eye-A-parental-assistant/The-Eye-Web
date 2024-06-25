@@ -3,9 +3,10 @@ import * as Components from '../components/AuthComponents';
 import Cookies from 'js-cookie';
 import firebaseLogin from "../utils/firebaseLogin";
 import firebaseSignup from "../utils/firebaseSignUp";
-import styled from 'styled-components';
 
 import "./authStyles.css";
+import { Single_user_fetch } from "../utils/Single_user_fetch";
+import { useEffect } from "react";
 
 
 
@@ -16,7 +17,19 @@ function AuthPage() {
         email: '',
         password: '',
         confirmPassword: '',
+        role: '',
+        PIN: 1111
     });
+
+    useEffect(() => {
+        const UID = Cookies.get('token');
+        if (UID) {
+            if(Cookies.get('role') == 'creator')
+                window.location.href = `/creator/${UID}`;
+            else
+                window.location.href = '/profiles';
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,13 +42,17 @@ function AuthPage() {
             alert("Passwords do not match!");
             return;
         }
-        const UID = await firebaseSignup(formData.email, formData.password, formData.name);
+        const UID = await firebaseSignup(formData.email, formData.password, formData.name, formData.role, formData.PIN);
         if (UID === undefined)
             return;
         
-        const fakeToken = UID;
-        Cookies.set('token', fakeToken, { expires: 1 });
-        window.location.href = '/'; // Redirect to home page
+        Cookies.set('token', UID, { expires: 1 });
+        Cookies.set('role', formData.role, { expires: 1 });
+
+        if(formData.role == 'creator')
+            window.location.href = `/creator/${UID}`;
+        else
+            window.location.href = '/profiles';
     };
 
     
@@ -46,9 +63,15 @@ function AuthPage() {
         if (UID === undefined)
             return;
         
-        const fakeToken = UID;
-        Cookies.set('token', fakeToken, { expires: 1 }); // Store JWT in cookies for 1 day
-        window.location.href = '/Profiles'; // Redirect to home page
+        Single_user_fetch(UID, ()=>{}).then((data) => {
+            Cookies.set('role', data.role, { expires: 1 });
+            Cookies.set('token', UID, { expires: 1 }); // Store JWT in cookies for 1 day
+            if(data.role == 'creator')
+                window.location.href = `/creator/${UID}`;
+            else
+                window.location.href = '/profiles';
+        });
+
     };
 
     return (

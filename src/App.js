@@ -50,7 +50,7 @@ function App() {
           <Route path="/profiles" element={<Profiles/>} />
           <Route path="/videos" element={<Home/>} />
           <Route path="/addchild" element={<AddChild/>} />
-          <Route path="/creatorchannel/:id" element={<CreatorChannel/>} />
+          <Route path="/creator/:id" element={<CreatorChannel/>} />
           <Route path="/upload" element={<Uppage/>} />
         </Routes>
 

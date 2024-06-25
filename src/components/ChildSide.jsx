@@ -283,7 +283,7 @@ export default function MiniDrawer() {
                 
                <List sx={{ backgroundColor: '#8ED197' }}>
     {/* ###################################################################### */}
-    <Link to='/' style={{textDecoration:"none",color:"inherit"}}>
+    <Link to='/videos' style={{textDecoration:"none",color:"inherit"}}>
     <ListItem key='Home' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{

@@ -7,15 +7,6 @@ import { useEffect, useState } from "react";
 import {Single_user_fetch} from "../utils/Single_user_fetch";
 
 
-// const Container = styled.div`
-// width: 100%;
-// display: flex;
-// justify-content: space-evenly;
-// flex-wrap:wrap;
-// overflow: hidden;
-
-// `
-
 const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;

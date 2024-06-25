@@ -9,6 +9,7 @@ import Child from "../models/Child";
 import updateChild from '../utils/updateChild'
 import { Timestamp, arrayUnion, arrayRemove } from "firebase/firestore";
 import { Single_user_fetch } from "../utils/Single_user_fetch";
+import incrementViews from "../utils/incrementViews";
 
 
 //msh ma3mol
@@ -164,7 +165,7 @@ const Video = () => {
   // const id = urlParams.get('id');
 
   useEffect(() => {
-
+    incrementViews(id);
     Single_video_fetch(id,setVideo,setCreator)
     .then((video) => {
       video_fetch(setVideos, video.tags, video.videoURL);

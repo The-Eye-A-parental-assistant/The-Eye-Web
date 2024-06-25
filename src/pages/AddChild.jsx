@@ -6,6 +6,7 @@ import { db } from '../utils/firebaseinit';
 import { doc, collection, addDoc, Timestamp, updateDoc, arrayUnion } from "firebase/firestore";
 import Cookies from 'js-cookie';
 import uploadImage from '../utils/uploadImage';
+import adaptorDatabaseFlags from '../utils/adaptorDatabaseFlags';
 
 const FormWrapper = styled.div`
     background-image: url("https://www.transparenttextures.com/patterns/robots.png");
@@ -116,18 +117,11 @@ const FormWrapper = styled.div`
             return;
         }
 
-        let selectedPrefs = [];
-        for (const [key, value] of Object.entries(prefs)) {
-            if (value) {
-                selectedPrefs.push(key.toLowerCase());
-            }
-        }
-
         const ParentUID = Cookies.get('token');
         const docData = {
-            PIN: 1111,
-            gender: gender,
-            name: name,
+            PIN: parseInt(PIN),
+            gender,
+            name,
             imageURL: placeholderImage,
             parentID: ParentUID,
             birthDate: Timestamp.fromDate(new Date(birthdate)),
@@ -135,8 +129,9 @@ const FormWrapper = styled.div`
             likes: [],
             dislikes: [],
             favourites: [],
-            prefs: selectedPrefs,
-            screenTime: {sun: 0, mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0}
+            prefs: adaptorDatabaseFlags(prefs),
+            screenTime: {sun: 0, mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0},
+            role: 'child',
         };
         const docRef = await addDoc(collection(db, "users"), docData);
         await updateDoc(doc(db, "users", ParentUID), {children: arrayUnion(docRef.id)});
