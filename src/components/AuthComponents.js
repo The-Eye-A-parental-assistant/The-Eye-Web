@@ -163,11 +163,12 @@ export const RadioLabel = styled.label`
   cursor: pointer;
 `;
 
-export const RadioInput = styled.input`
-  margin-right: 10px;
+export const RadioInput = styled.input.attrs({ type: 'radio' })`
   cursor: pointer;
+  transform: scale(1.5); // Adjust the scale value to make it bigger or smaller
+  margin-right: 10px; // Adjust spacing as needed after scaling
   &:checked + span {
-    color: #F1C104; // Color the label text when the radio is selected
+    color: #F1C104; // Example color for the label text when the radio is selected
   }
 `;
 

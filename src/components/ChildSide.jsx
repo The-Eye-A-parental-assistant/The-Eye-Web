@@ -306,7 +306,7 @@ export default function MiniDrawer() {
     </ListItem>
     </Link>
     {/* ###################################################################### */}
-
+    <Link to='/history' style={{textDecoration:"none",color:"inherit"}}>
     <ListItem key='History' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -327,7 +327,10 @@ export default function MiniDrawer() {
             <ListItemText primary='History' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    </Link>
     {/* ###################################################################### */}
+    <Link to='/likedvids' style={{textDecoration:"none",color:"inherit"}}>
+
     <ListItem key='Liked videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -348,7 +351,9 @@ export default function MiniDrawer() {
             <ListItemText primary='Liked videos' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    </Link>
     {/* ###################################################################### */}
+    <Link to='/dislikedvids' style={{textDecoration:"none",color:"inherit"}}>
 
     <ListItem key='Disliked videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
@@ -370,7 +375,10 @@ export default function MiniDrawer() {
             <ListItemText primary='Disliked videos' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    </Link>
         {/* ###################################################################### */}
+        <Link to='/saved' style={{textDecoration:"none",color:"inherit"}}>
+
         <ListItem key='Saved videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -391,6 +399,7 @@ export default function MiniDrawer() {
             <ListItemText primary='Saved videos' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    </Link>
         {/* ###################################################################### */}
 
 
