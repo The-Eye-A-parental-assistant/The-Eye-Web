@@ -30,11 +30,10 @@ import FlagIcon from '@mui/icons-material/Flag';
 import SmsFailedIcon from '@mui/icons-material/SmsFailed';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Avatar from '@mui/material/Avatar';
-// import App2 from './SubscriptionCard';
-import Creators from '../pages/Creators';
-import { Grow } from '@mui/material';
-// import UpPage from './UpPage'
+
 // ---------------------------------------------------------------------
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -216,14 +215,15 @@ export default function MiniDrawer() {
         <Box 
         // sx={{
         //     display: 'flex',
-        //     minHeight: '100vh',
+        //     minHeight: '40vh',
         //     backgroundColor: '#F0E5FF',
-        //     backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");',
+            // backgroundImage: 'url("https://www.transparenttextures.com/patterns/robots.png");',
             // url("https://www.transparenttextures.com/patterns/food.png");
             //'url("https://www.transparenttextures.com/patterns/foggy-birds.png");', backgroundColor: '#00a698'
             // url("https://www.transparenttextures.com/patterns/black-scales.png");
             // url("https://www.transparenttextures.com/patterns/cartographer.png");
             //url("https://www.transparenttextures.com/patterns/food.png"); 
+        // }}
         >
             <CssBaseline />
             <AppBar position="fixed" open={open} sx={{ backgroundColor: '#8ED197' }}>
@@ -241,11 +241,12 @@ export default function MiniDrawer() {
                         <MenuIcon />
                     </IconButton>
                     <VisibilityIcon sx={{ ml: 2, mr: 2 }} />
+                  
                     <Typography
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{ mr: 40 }}
+                        sx={{ mr: 40 , paddingLeft: '20px'}}
                     >
                         The Eye
                     </Typography>
@@ -281,7 +282,8 @@ export default function MiniDrawer() {
                 <Divider />
                 
                <List sx={{ backgroundColor: '#8ED197' }}>
-                <Link to='/' style={{textDecoration:"none",color:"inherit"}}>
+    {/* ###################################################################### */}
+    <Link to='/' style={{textDecoration:"none",color:"inherit"}}>
     <ListItem key='Home' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -303,7 +305,8 @@ export default function MiniDrawer() {
         </ListItemButton>
     </ListItem>
     </Link>
-    
+    {/* ###################################################################### */}
+
     <ListItem key='History' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -324,6 +327,7 @@ export default function MiniDrawer() {
             <ListItemText primary='History' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    {/* ###################################################################### */}
     <ListItem key='Liked videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -344,6 +348,53 @@ export default function MiniDrawer() {
             <ListItemText primary='Liked videos' sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
     </ListItem>
+    {/* ###################################################################### */}
+
+    <ListItem key='Disliked videos' disablePadding sx={{ display: 'block' }}>
+        <ListItemButton
+            sx={{
+                minHeight: 83,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+            }}
+        >
+            <ListItemIcon
+                sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                }}
+            >
+                <ThumbDownIcon />
+            </ListItemIcon>
+            <ListItemText primary='Disliked videos' sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+    </ListItem>
+        {/* ###################################################################### */}
+        <ListItem key='Saved videos' disablePadding sx={{ display: 'block' }}>
+        <ListItemButton
+            sx={{
+                minHeight: 83,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+            }}
+        >
+            <ListItemIcon
+                sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                }}
+            >
+                <BookmarkIcon />
+            </ListItemIcon>
+            <ListItemText primary='Saved videos' sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+    </ListItem>
+        {/* ###################################################################### */}
+
+
+
 </List>
                 <Divider />
                 
@@ -384,7 +435,7 @@ export default function MiniDrawer() {
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 85,
+                                    minHeight: 88,
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
@@ -403,56 +454,11 @@ export default function MiniDrawer() {
                         </ListItem>
                     ))}
                 </List>
-                <List sx={{ backgroundColor: '#8ED197' }} className='flex-grow-1'>
-                    {['Edit Flags'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 85,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {text === 'Edit Flags' && <FlagIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-                <List sx={{ backgroundColor: '#8ED197' }} className='flex-grow-1'>
-                    {['Send feedback'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 85,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {text === 'Send feedback' && <SmsFailedIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+               
+                
               
             </Drawer>
+           
             
         </Box>
     );

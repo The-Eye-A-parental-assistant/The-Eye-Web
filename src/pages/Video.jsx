@@ -5,15 +5,10 @@ import {video_fetch} from "../utils/video_fetch";
 import { useEffect, useState } from "react";
 import {Single_video_fetch} from '../utils/Single_video_fetch';
 import { useParams } from 'react-router-dom';
-import Menu from '../components/Menu';
-
-import Navbar from '../components/Navbar';
-import Cookies from 'js-cookie';
 import Child from "../models/Child";
 import updateChild from '../utils/updateChild'
-import { Timestamp } from "firebase/firestore";
-
-import SendIcon from '@mui/icons-material/Send';
+import { Timestamp, arrayUnion, arrayRemove } from "firebase/firestore";
+import { Single_user_fetch } from "../utils/Single_user_fetch";
 
 
 //msh ma3mol
@@ -157,28 +152,42 @@ const Video = () => {
 
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState([]);
-  const [child, setChild] = useState(Child.fromJSON(Cookies.get('child')));
   const [creator, setCreator] = useState([]);
 
-  const [thumbUpClicked, setThumbUpClicked] = useState(child.likes.includes(id));
-  const [thumbDownClicked, setThumbDownClicked] = useState(child.dislikes.includes(id));
-  const [bookmarkClicked, setBookmarkClicked] = useState(child.favourites.includes(id));
-
-  let historyAdded = false;
+  const [thumbUpClicked, setThumbUpClicked] = useState(false);
+  const [thumbDownClicked, setThumbDownClicked] = useState(false);
+  const [bookmarkClicked, setBookmarkClicked] = useState(false);
+  const [disbled, setDisabled] = useState(true);
+  const [childID, setChildID] = useState(null);
 
   // const urlParams = new URLSearchParams(window.location.search);
   // const id = urlParams.get('id');
 
   useEffect(() => {
+
     Single_video_fetch(id,setVideo,setCreator)
-    .then(async (video) => {
-      video_fetch(setVideos, video.tags, video.videoURL)
-      if (!historyAdded) {
-        child.history.push({video: id, date: Timestamp.fromDate(new Date())});
-        await updateChild(child, {history: child.history});
-        historyAdded = true;
+    .then((video) => {
+      video_fetch(setVideos, video.tags, video.videoURL);
+    });
+
+    const childsessionID = sessionStorage.getItem('child');
+    
+    if (childsessionID === null || childsessionID === undefined || childsessionID === '') {
+      setDisabled(true);
+      return;
+    }
+    
+    Single_user_fetch(childsessionID, ()=>{}).then((data) => {
+      if (data instanceof Child) {
+        setDisabled(false);
+        setThumbDownClicked(data.dislikes.includes(id));
+        setThumbUpClicked(data.likes.includes(id));
+        setBookmarkClicked(data.favourites.includes(id));
+        const now = Timestamp.now();
+        updateChild(childsessionID, {history: arrayUnion({video: id, date: now})});
       }
-    })
+    });
+    setChildID(childsessionID);
   }, [id]);
 
   const handleCopyLink = () => {
@@ -190,44 +199,32 @@ const Video = () => {
   };
 
   const handleThumbUpClick = () => {
-    console.log("was " + thumbUpClicked);
+    if (thumbUpClicked === false) // will become true
+      updateChild(childID, {likes: arrayUnion(id), dislikes: arrayRemove(id)});
+    else
+      updateChild(childID, {likes: arrayRemove(id)});
+    
     setThumbUpClicked(!thumbUpClicked);
     setThumbDownClicked(false);
-    console.log("now " + thumbUpClicked);
-
-    child.dislikes = child.dislikes.filter(dislike => dislike !== id);
-
-    if (thumbUpClicked === true)
-      child.likes.push(id);
-    else
-      child.likes = child.likes.filter(like => like !== id);
-
-    updateChild(child, {likes: child.likes, dislikes: child.dislikes});
   };
 
   const handleThumbDownClick = () => {
+    if (thumbDownClicked === false) // will become true
+      updateChild(childID, {dislikes: arrayUnion(id), likes: arrayRemove(id)});
+    else
+      updateChild(childID, {dislikes: arrayRemove(id)});
+    
     setThumbDownClicked(!thumbDownClicked);
     setThumbUpClicked(false);
-
-    child.likes = child.likes.filter(like => like !== id);
-
-    if (thumbDownClicked === true)
-      child.dislikes.push(id);
-    else
-      child.dislikes = child.dislikes.filter(dislike => dislike !== id);
-
-    updateChild(child, {likes: child.likes, dislikes: child.dislikes});
-  };
+};
 
   const handleBookmarkClick = () => {
-    setBookmarkClicked(!bookmarkClicked);
-
-    if (bookmarkClicked === true)
-      child.favourites.push(id);
+    if (bookmarkClicked === false) // will become true
+      updateChild(childID, {favourites: arrayUnion(id)});
     else
-      child.favourites = child.favourites.filter(favourite => favourite !== id);
-
-    updateChild(child, {favourites: child.favourites});
+      updateChild(childID, {favourites: arrayRemove(id)});
+    
+    setBookmarkClicked(!bookmarkClicked);
   };
   return (
     <Container2>
@@ -258,14 +255,14 @@ const Video = () => {
           <Buttons></Buttons>
           <Buttons>
 
-      <Button onClick={handleThumbUpClick}>
+      <Button onClick={disbled ? undefined : handleThumbUpClick} >
         {thumbUpClicked ? <ThumbUpIcon style={{color: '#8ED197'}}/> : <ThumbUpAltOutlinedIcon />}Like
       </Button>
-      <Button onClick={handleThumbDownClick}>
+      <Button onClick={disbled ? undefined : handleThumbDownClick}>
         {thumbDownClicked ? <ThumbDownIcon style={{color: '#8ED197'}} /> : <ThumbDownOutlinedIcon />}Dislike
       </Button>
       <Button onClick={handleCopyLink}><ReplyOutlinedIcon/>Share</Button>
-      <Button onClick={handleBookmarkClick}>
+      <Button onClick={disbled ? undefined : handleBookmarkClick}>
         {bookmarkClicked ? <BookmarkAddedIcon style={{color: '#8ED197'}}/> : <BookmarkAddOutlinedIcon />}Save
       </Button>
 
@@ -293,10 +290,9 @@ const Video = () => {
 
 {videos.map(video => (
          <Card
-         // const Card = ({id,title,thumbnail,creatorID,type})
+         key={video.id}
          id={video.id}
          title={video.title}
-
          thumbnail={video.thumbnail}
          creatorID={video.creatorID}
          type='sm'

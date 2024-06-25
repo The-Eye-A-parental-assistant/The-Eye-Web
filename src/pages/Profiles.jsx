@@ -77,15 +77,13 @@ function Profile() {
         setId('');
         setOpen(false);
     };
-
-    const handleConfirm = () => {
+    const handleConfirm = async() => {
         if(selected != null && selected.PIN.toString() == id) {
             setId('');
             setOpen(false);
 
             // create new cookie with child info
-            Cookies.set('child', JSON.stringify(selected), { expires: 1 });
-
+            sessionStorage.setItem('child', selected.id);
             selected = null;
             window.location.href = '/videos';
         }

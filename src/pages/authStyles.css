@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
+.body1 {
   background: linear-gradient(-45deg,  #79AC78, #8ED197, #FEFDED, #9AD0C2, #265073);
   background-size: 400% 400%;
   animation: gradient 8s ease infinite;
@@ -16,7 +16,6 @@ body {
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   height: 100vh;
-  margin: -20px 0 50px;
 }
 
 @keyframes gradient {

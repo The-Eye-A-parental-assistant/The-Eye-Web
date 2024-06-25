@@ -1,4 +1,4 @@
-# Chess
+# The Eye Web
 
 website to the eye parental control platform through desktop browser
 

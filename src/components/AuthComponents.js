@@ -155,3 +155,28 @@ export const Paragraph = styled.p`
    letter-spacing: 0.5px;
    margin: 20px 0 30px
  `;
+
+
+export const RadioLabel = styled.label`
+  margin-right: 20px;
+  color: #333; // Default text color, adjust as needed
+  cursor: pointer;
+`;
+
+export const RadioInput = styled.input`
+  margin-right: 10px;
+  cursor: pointer;
+  &:checked + span {
+    color: #F1C104; // Color the label text when the radio is selected
+  }
+`;
+
+export const RadioContainer = styled.div`
+  display: flex;
+  justify-content: start; 
+  margin-bottom: 20px; 
+`;
+
+export const RadioSpan = styled.span`
+  // Additional styles for the label text if needed
+`;

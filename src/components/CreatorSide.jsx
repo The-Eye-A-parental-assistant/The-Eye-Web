@@ -201,7 +201,7 @@ export default function MiniDrawer() {
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{ mr: 40 }}
+                        sx={{ mr: 40 , paddingLeft: '20px'}}
                     >
                         The Eye
                     </Typography>
