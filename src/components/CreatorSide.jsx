@@ -35,6 +35,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Avatar from '@mui/material/Avatar';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import Cookies from 'js-cookie';
 
 // ---------------------------------------------------------------------
 const Search = styled('div')(({ theme }) => ({
@@ -236,7 +237,7 @@ export default function MiniDrawer() {
                 
                <List sx={{ backgroundColor: '#8ED197' }}>
     {/* ###################################################################### */}
-    <Link to='/creatorchannel-CR/:id' style={{textDecoration:"none",color:"inherit"}}>
+    <Link to={`/creatorchannel-CR/${Cookies.get('token')}`} style={{textDecoration:"none",color:"inherit"}}>
     <ListItem key='Home' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
@@ -283,7 +284,7 @@ export default function MiniDrawer() {
     </ListItem>
     </Link>
         {/* ###################################################################### */}
-        <Link to='/Support' style={{textDecoration:"none",color:"inherit"}}>
+        <Link to='/support' style={{textDecoration:"none",color:"inherit"}}>
 
         <ListItem key='Contact Support' disablePadding sx={{ display: 'block' }}>
         <ListItemButton

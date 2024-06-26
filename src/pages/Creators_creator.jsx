@@ -6,7 +6,6 @@ import {
     CardMedia,
     Typography,
     Grid,
-    Container,
 } from '@mui/material';
 import CreatorSide from '../components/CreatorSide';
 import { db } from '../utils/firebaseinit';
@@ -14,7 +13,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import Creator from '../models/Creator';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ResponsiveContainer } from 'recharts';
+import Cookies from 'js-cookie';
 
 const Container2 = styled.div`
   display: flex;
@@ -27,19 +26,10 @@ const Main = styled.div`
 
   
 `;
-const Container3 = styled.div`
-  display: flex;
-  gap: 24px;
-  padding: 5px;
-`;
-
-const Content = styled.div`
-  flex: 5;
-`;
 
 // A single subscription card component
 const SubscriptionCard = ({ creator }) => (
-    <Link to='/creatorchannel/:id' style={{textDecoration:"none",color:"inherit"}}>
+    <Link to={`/creatorchannel-CR/${creator.id}`} style={{textDecoration:"none",color:"inherit"}}>
 
     <Card sx={{ maxWidth: 345 , height:350 }}>
         <CardMedia
@@ -77,7 +67,10 @@ const SubscriptionCard = ({ creator }) => (
 const SubscriptionPage = () => {
     const [subscriptions, setSubscriptions] = React.useState([]);
     React.useEffect(() => {
-        const q = query(collection(db, "users"), where("role", "==", "creator"));
+        const q = query(collection(db, "users"),
+                        where("role", "==", "creator"),
+                        where('__name__', '!=', Cookies.get('token'))
+                    );
 
         getDocs(q).then((querySnapshot) => {
             const creators = []

@@ -25,7 +25,7 @@ function AuthPage() {
         const UID = Cookies.get('token');
         if (UID) {
             if(Cookies.get('role') == 'creator')
-                window.location.href = `/creator/${UID}`;
+                window.location.href = `/creatorchannel-CR/${UID}`;
             else
                 window.location.href = '/profiles';
         }
@@ -50,7 +50,7 @@ function AuthPage() {
         Cookies.set('role', formData.role, { expires: 1 });
 
         if(formData.role == 'creator')
-            window.location.href = `/creator/${UID}`;
+            window.location.href = `/creatorchannel-CR/${UID}`;
         else
             window.location.href = '/profiles';
     };
@@ -67,7 +67,7 @@ function AuthPage() {
             Cookies.set('role', data.role, { expires: 1 });
             Cookies.set('token', UID, { expires: 1 }); // Store JWT in cookies for 1 day
             if(data.role == 'creator')
-                window.location.href = `/creator/${UID}`;
+                window.location.href = `/creatorchannel-CR/${UID}`;
             else
                 window.location.href = '/profiles';
         });
