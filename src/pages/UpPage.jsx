@@ -1,91 +1,159 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Avatar, TextField } from '@mui/material';
-import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import AddIcon from '@mui/icons-material/Add';
-import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
-import SentimentVerySatisfiedSharpIcon from '@mui/icons-material/SentimentVerySatisfiedSharp';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import CreatorSide from '../components/CreatorSide';
+import Creatorside from "../components/CreatorSide";
+
+
 
 const Container2 = styled.div`
   display: flex;
-  padding-top: 80px;
+  padding-top: 20px;
   padding-left: 20px;
+    background-image: url("https://www.transparenttextures.com/patterns/robots.png");
+
 `;
 
 const Main = styled.div`
   flex: 7;
 `;
 
+const UploadPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ background-color: rgba(255, 255, 255); 
 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  max-width: 1400px; 
+  min-height :600px;
+  margin: 70px auto 0 auto ;
+`;
 
-export default function ButtonAppBar() {
-    const handleUserAvatarClick = () => {
-        console.log('Button clicked!');
-    };
-    const handleNotificationsClick = () => {
+const Title = styled.h1`
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 24px;
+  text-align: center;
+`;
 
-    };
-    const handleContactUsClick = () => {
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
-    };
-    const handleUpLoadVideoClick = () => {
-        console.log('Button clicked!');
-    };
-    const handleAddButtonClick = () => {
+const InputField = styled.input`
+  padding: 10px;
+  margin-bottom: 25px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+`;
 
+const TextArea = styled.textarea`
+  padding: 10px;
+  margin-bottom: 25px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+`;
+
+const Label = styled.label`
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+`;
+
+const UploadButton = styled.button`
+  background-color: #8ED197;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 25px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #7ac486;
+  }
+`;
+
+const ProgressBar = styled.div`
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 25px;
+`;
+
+const Progress = styled.div`
+  height: 20px;
+  background-color: #8ED197;
+  width: ${(props) => props.progress}%;
+  transition: width 0.4s ease;
+`;
+
+const UploadPage = () => {
+    const [videoTitle, setVideoTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [videoFile, setVideoFile] = useState(null);
+    const [thumbnail, setThumbnail] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    const handleFileChange = (e) => {
+        setVideoFile(e.target.files[0]);
     };
-    
+
+    const handleThumbnailChange = (e) => {
+        setThumbnail(e.target.files[0]);
+    };
+
+    const handleUpload = (e) => {
+        e.preventDefault();
+
+        console.log('Uploading video...');
+        setUploadProgress(50);
+    };
+
     return (
-        <Container2>
-        <CreatorSide />
-        <Main>
+        <Container2 >
 
-        <Box sx={{ flexGrow: 1 }}>
-            <Toolbar sx={{ marginBottom: 10 }}>
-                <IconButton onClick={handleUserAvatarClick} disableFocusRipple disableRipple>
-                    <Avatar sx={{ width: 56, height: 56, mr: 2 }} src='https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg' />
-                </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    USER Name
-                </Typography>
+            <Creatorside />
 
-                <IconButton onClick={handleContactUsClick} disableFocusRipple disableRipple>
-                    <Avatar edge="start" sx={{ width: 56, height: 56, mr: 4, backgroundColor: 'black' }}><HeadsetMicIcon /></Avatar>
-                </IconButton>
-                <IconButton onClick={handleNotificationsClick} disableFocusRipple disableRipple>
-                    <CircleNotificationsIcon sx={{ width: 56, height: 56, mr: 2 }} />
-                </IconButton>
-            </Toolbar>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <div>
-                    <IconButton onClick={handleUpLoadVideoClick} disableFocusRipple disableRipple>
-                        <AddIcon sx={{ fontSize: 100, marginLeft: 64, border: '10px solid green', color: 'green', borderRadius: '10%' }} />
-                    </IconButton>
-                    <Typography variant="h5" component="div" sx={{ marginBottom: 8, marginLeft: 66 }}>Upload</Typography>
-                    <Typography variant="h5" component="div" sx={{ fontFamily: 'Butterfly Kids', marginBottom: 4, fontSize: 60 }}>
-                        Kindly upload your video, and we'll handle the rest with care. <SentimentVerySatisfiedSharpIcon />
-                    </Typography>
+            <Main >
 
-                    <TextField id="title" color='success' label="Title" variant="outlined" fullWidth margin="normal" />
-                    <TextField id="description" color='success' label="Description" variant="outlined" fullWidth margin="normal" sx={{ marginBottom: 6 }} />
-                    <Button onClick={handleAddButtonClick} disableFocusRipple disableRipple variant="contained" color="success" fullWidth sx={{ marginBottom: 2 }}>
-                        Add
-                    </Button>
-                    <Typography variant="h5" component="div" sx={{ fontFamily: 'Butterfly Kids', marginBottom: 4, fontSize: 40 }}>
-                        Your effort is greatly appreciated,  We'll scan your Videos and get them up on site ASAP <SentimentVerySatisfiedSharpIcon />
-                    </Typography>
-                </div>
-            </Box>
-        </Box>
-        </Main>
+                <UploadPageContainer  >
+                    <Title>Upload</Title>
+                    <Form onSubmit={handleUpload}>
+                        <Label>Title:</Label>
+                        <InputField
+                            type="text"
+                            color='success'
+                            value={videoTitle}
+                            onChange={(e) => setVideoTitle(e.target.value)}
+                        />
+                        <Label>Description:</Label>
+                        <TextArea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                        <Label>Video File:</Label>
+                        <InputField type="file" accept="video/*" onChange={handleFileChange} />
+                        <Label>Thumbnail:</Label>
+                        <InputField type="file" accept="image/*" onChange={handleThumbnailChange} />
+                        <UploadButton type="submit">Upload</UploadButton>
+                        {uploadProgress > 0 && (
+                            <ProgressBar>
+                                <Progress progress={uploadProgress}></Progress>
+                            </ProgressBar>
+                        )}
+                    </Form>
+                </UploadPageContainer>
+            </Main>
         </Container2>
     );
-}
+};
+
+export default UploadPage;

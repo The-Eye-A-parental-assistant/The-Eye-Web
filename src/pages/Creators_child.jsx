@@ -39,7 +39,7 @@ const Content = styled.div`
 
 // A single subscription card component
 const SubscriptionCard = ({ creator }) => (
-    <Link to='/creatorchannel/:id' style={{textDecoration:"none",color:"inherit"}}>
+    <Link to='/creatorchannel-CH/:id' style={{textDecoration:"none",color:"inherit"}}>
 
     <Card sx={{ maxWidth: 345 , height:350 }}>
         <CardMedia

@@ -15,6 +15,7 @@ import LikedVids from './pages/LikedVids';
 import DislikedVids from './pages/DislikedVids';
 import SavedVids from './pages/SavedVids';
 import CreatorsCREATOR from './pages/Creators_creator';
+
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 
@@ -50,7 +51,6 @@ function App() {
           <Route path="/" element={<AuthPage/>} />
           <Route path="/parent" element={<Graphs/>} />
           <Route path="video/:id" element={<Video/>} />
-          <Route path="/creators" element={<Creators/>} />
           <Route path="/login" element={<AuthPage/>} />
           <Route path="/profiles" element={<Profiles/>} />
 
@@ -60,7 +60,6 @@ function App() {
 
           <Route path="/videos" element={<Home/>} />
           <Route path="/addchild" element={<AddChild/>} />
-          <Route path="/creator/:id" element={<CreatorChannel/>} />
           <Route path="/upload" element={<Uppage/>} />
           
           <Route path="/history" element={<History/>} />
@@ -74,7 +73,7 @@ function App() {
           <Route path="/creatorchannel-CH/:id" element={<CreatorChannelCHILD/>} />
           <Route path="/creatorchannel-CR/:id" element={<CreatorChannelCREATOR/>} />
 
-          <Route path="/creators-CH" element={<CreatorChannelCHILD/>} />
+          <Route path="/creators-CH" element={<CreatorsCHILD/>} />
           <Route path="/creators-CR" element={<CreatorsCREATOR/>} />
 
           <Route path="/upload" element={<Uppage/>} />
