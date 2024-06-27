@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Creatorside from "../components/CreatorSide";
+import Cookies from 'js-cookie';
+import { db } from '../utils/firebaseinit';
+import { addDoc, collection, Timestamp, updateDoc, arrayUnion, doc } from "firebase/firestore";
+import uploadImage from '../utils/uploadImage';
+import uploadVideo from '../utils/uploadVideo';
 
 
 
@@ -113,11 +118,36 @@ const UploadPage = () => {
         setThumbnail(e.target.files[0]);
     };
 
-    const handleUpload = (e) => {
+    const handleUpload = async (e) => {
         e.preventDefault();
-
         console.log('Uploading video...');
-        setUploadProgress(50);
+        const UID = Cookies.get('token');
+        const videoThumbnailPlaceholder = "https://firebasestorage.googleapis.com/v0/b/the-eye-66e7b.appspot.com/o/App%20Assets%2Fvideo-placeholder.png?alt=media&token=92eea41a-d80c-47b6-81b4-0d3ca801b7d2";
+
+        const docData = {
+          title: videoTitle,
+          thumbnail: videoThumbnailPlaceholder,
+          videoURL: "",
+          description: description,
+          views: 0,
+          creatorID: UID,
+          status: "pending",
+          comments: [],
+          date: Timestamp.now(),
+          tags: [],
+        };
+        return;
+
+        const docRef = await addDoc(collection(db, "videos"), docData);
+
+        const promise1 = updateDoc(doc(db, "users", UID), {videos: arrayUnion(docRef.id)});
+        const promise2 = uploadImage(thumbnail, `/videos/${UID}/${docRef.id}`);
+        const promise3 = uploadVideo(videoFile, `/videos/${UID}/${docRef.id}.${videoFile.name.split('.').pop()}`, setUploadProgress);
+
+        Promise.all([promise1, promise2, promise3]).then(async () => {
+          await updateDoc(docRef, {thumbnail: await promise2, videoURL: await promise3});
+          alert('Video uploaded successfully');
+        });
     };
 
     return (

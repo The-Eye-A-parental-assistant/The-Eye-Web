@@ -81,6 +81,7 @@ function App() {
           <Route path="/creators-CR" element={<CreatorsCREATOR/>} />
 
           <Route path="/upload" element={<Uppage/>} />
+          <Route path="/support" element={<Uppage/>} /> //TODO
           
         
         </Routes>
