@@ -347,6 +347,7 @@ export default function MiniDrawer() {
             {/* ###################################################################### */}
 
                 <Divider />
+                <Link to='/settings-Cr' style={{textDecoration:"none",color:"inherit"}}>
                 <List sx={{ backgroundColor: '#8ED197' }} className='flex-grow-1'>
                     {['Settings'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -371,6 +372,7 @@ export default function MiniDrawer() {
                         </ListItem>
                     ))}
                 </List>
+                </Link>
                
                 
               

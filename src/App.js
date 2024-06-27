@@ -15,6 +15,8 @@ import LikedVids from './pages/LikedVids';
 import DislikedVids from './pages/DislikedVids';
 import SavedVids from './pages/SavedVids';
 import CreatorsCREATOR from './pages/Creators_creator';
+import SettingsCreator from './pages/CREATOR_settings';
+import SettingsParent from './pages/PARENT_settings'; 
 
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
@@ -54,6 +56,8 @@ function App() {
           <Route path="/login" element={<AuthPage/>} />
           <Route path="/profiles" element={<Profiles/>} />
 
+          <Route path="/settings-Pr" element={<SettingsParent/>} />
+          <Route path="/settings-Cr" element={<SettingsCreator/>} />
 
 
           <Route path="video/:id" element={<Video/>} />
