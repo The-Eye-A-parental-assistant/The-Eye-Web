@@ -11,6 +11,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputBase from '@mui/material/InputBase';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from 'react-router-dom';
 // ---------------------------------------------------------------------
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -174,6 +175,8 @@ export default function MiniDrawer() {
                             inputProps={{ 'aria-label': 'search' }}
                             />
                     </Search>
+
+                    <Link to='/parent' style={{textDecoration:"none",color:"inherit"}}>
                     <IconButton
                         size="large"
                         edge="end"
@@ -187,6 +190,9 @@ export default function MiniDrawer() {
                         <AccountCircle />
 
                     </IconButton>
+                            </Link>
+
+                    <Link to='/settings-Pr' style={{textDecoration:"none",color:"inherit"}}>
                     <IconButton
                         size="large"
                         edge="end"
@@ -197,6 +203,7 @@ export default function MiniDrawer() {
                         >
                     <SettingsIcon/>
                     </IconButton>
+                    </Link>
 
                 </Toolbar>
             </AppBar>

@@ -101,6 +101,9 @@ const Progress = styled.div`
 `;
 
 const UploadPage = () => {
+  // value={videoTitle}
+  // onChange={(e) => setVideoTitle(e.target.value)}
+  
     const [videoTitle, setVideoTitle] = useState('');
     const [description, setDescription] = useState('');
     const [videoFile, setVideoFile] = useState(null);
