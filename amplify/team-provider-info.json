@@ -1,0 +1,15 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-theeyeflutter-staging-2d1d9-authRole",
+      "UnauthRoleArn": "arn:aws:iam::992382812374:role/amplify-theeyeflutter-staging-2d1d9-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::992382812374:role/amplify-theeyeflutter-staging-2d1d9-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-theeyeflutter-staging-2d1d9-deployment",
+      "UnauthRoleName": "amplify-theeyeflutter-staging-2d1d9-unauthRole",
+      "StackName": "amplify-theeyeflutter-staging-2d1d9",
+      "StackId": "arn:aws:cloudformation:eu-central-1:992382812374:stack/amplify-theeyeflutter-staging-2d1d9/9042a9e0-f972-11ee-8740-061387a055c3",
+      "AmplifyAppId": "d3386i0kbaf3xm"
+    }
+  }
+}

@@ -133,7 +133,7 @@ const UploadPage = () => {
           date: Timestamp.now(),
           tags: [],
         };
-        return;
+
 
         const docRef = await addDoc(collection(db, "videos"), docData);
 
@@ -142,7 +142,9 @@ const UploadPage = () => {
         const promise3 = uploadVideo(videoFile, `/videos/${UID}/${docRef.id}.${videoFile.name.split('.').pop()}`, setUploadProgress);
 
         Promise.all([promise1, promise2, promise3]).then(async () => {
-          await updateDoc(docRef, {thumbnail: await promise2, videoURL: await promise3});
+          const cdnRoot = 'https://d2qmp7544om0tu.cloudfront.net';
+          const videoURL = `${cdnRoot}/public/videos/${UID}/${docRef.id}.${videoFile.name.split('.').pop()}`
+          await updateDoc(docRef, {thumbnail: await promise2, videoURL: videoURL});
           alert('Video uploaded successfully');
         });
     };
