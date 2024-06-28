@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Typography, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Box, Backdrop, Grid, Container, Paper } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Typography, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Backdrop, Grid, Container, Paper } from '@mui/material';
 import styled from 'styled-components';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import FiberPinIcon from '@mui/icons-material/FiberPin';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import ChildSide from "../components/ChildSide";
 import CreatorSide from "../components/CreatorSide";
-import ParentNav from "../components/ParentNav";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Cookies from 'js-cookie';
+import { Single_user_fetch } from '../utils/Single_user_fetch';
+import { auth, db } from '../utils/firebaseinit';
+import { signOut, deleteUser, updatePassword  } from "firebase/auth";
+import updateChild from '../utils/updateChild';
+import { doc, deleteDoc } from "firebase/firestore";
 
 const Container2 = styled.div`
   display: flex;
@@ -67,11 +69,21 @@ function FirstTry() {
   const [openChangeIdDialog, setOpenChangeIdDialog] = useState(false);
   const [openContactDialog, setOpenContactDialog] = useState(false);
   const [name, setName] = useState('');
-  const [oldPassword, setOldPassword] = useState('');
+  const [oldName, setOldName] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [newId, setNewId] = useState('');
-  const [contactMessage, setContactMessage] = useState('');
+
+  useEffect(() => {
+    const UID = Cookies.get('token');
+    if (UID === undefined || UID === '' || UID === null) {
+      alert('Please login first');
+      window.location.href = '/login';
+    }
+
+    Single_user_fetch(UID, ()=>{}).then((creator) => {
+      setOldName(creator.name);
+    });
+  });
 
   const handleClose = () => {
     setOpenNameDialog(false);
@@ -80,6 +92,63 @@ function FirstTry() {
     setOpenDeleteDialog(false);
     setOpenChangeIdDialog(false);
     setOpenContactDialog(false);
+  };
+
+  const handleChangeName = () => {
+    updateChild(Cookies.get('token'), { name: name });
+    setName('');
+
+    handleClose();
+  };
+
+  const handleChangePassword = () => {
+    if (newPassword !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+
+
+    const user = auth.currentUser;
+    updatePassword(user, newPassword).then(() => {}).catch((error) => {
+      alert("error updating password" + error.message);
+    });
+
+    handleClose();
+  };
+
+  const handleSignout = () => {
+    //signout with firebase
+    signOut(auth).then(() => {
+      Cookies.remove('token');
+      Cookies.remove('role');
+
+      window.location.href = '/login';
+    }).catch(() => {
+      alert('error signing out!\n please try again');
+    });
+
+    handleClose();
+  };
+
+  const handleDeleteAccount = async () => {
+    deleteUser(auth.currentUser).then(async () => {
+      await deleteDoc(doc(db, "users", Cookies.get('token')));
+
+      Cookies.remove('token');
+      Cookies.remove('role');
+
+      window.location.href = '/login';
+    })
+    .catch((error) => {
+      alert("error deleting user\n" + error.message);
+    });
+
+    handleClose();
   };
 
   return (
@@ -104,7 +173,7 @@ function FirstTry() {
             
 
             <Grid item>
-                <Button fullWidth variant="contained"  onClick={() => (true)} color='success' sx={{ borderRadius: '10px' ,backgroundColor:'#6CB066' }}>Sign Out <ExitToAppIcon sx={{ ml: '20px' }} /></Button>
+                <Button fullWidth variant="contained"  onClick={handleSignout} color='success' sx={{ borderRadius: '10px' ,backgroundColor:'#6CB066' }}>Sign Out <ExitToAppIcon sx={{ ml: '20px' }} /></Button>
             </Grid>
 
             
@@ -112,30 +181,12 @@ function FirstTry() {
             
             
         </Grid>
-              {/* <Grid container direction="column" spacing={4.5}>
-
-                    <Grid item>
-                    <Button fullWidth variant="contained" color='success' onClick={() => setOpenNameDialog(true)} sx={{ borderRadius: '30px', height: '5vh' }}>Change Name</Button>
-                    </Grid>
-
-                    <Grid item>
-                    <Button fullWidth variant="contained" color='success' onClick={() => setOpenPasswordDialog(true)} sx={{ borderRadius: '30px', height: '5vh' }}>Change Password</Button>
-                    </Grid>
-
-                    <Grid item>
-                    <Button fullWidth variant="contained" color='success' onClick={() => setOpenChangeIdDialog(true)} sx={{ borderRadius: '30px', height: '5vh' }}>Change ID</Button>
-                    </Grid>
-                    
-                    <Grid item>
-                    <Button fullWidth variant="contained" onClick={() => setOpenContactDialog(true)} color='error' sx={{ borderRadius: '30px', height: '5vh' }}>Report Video</Button>
-                    </Grid>
-              </Grid> */}
             </Paper>
         </Container>
 
           <DialogStyle open={openNameDialog} onClose={handleClose}>
             <CustomDialogContent dividers>
-              <Typography color={'white'} variant="h5">Old Name</Typography>
+              <Typography color={'white'} variant="h5"> {oldName} </Typography>
               <TextField fullWidth
                 inputProps={{ style: { backgroundColor: 'white', borderRadius: '10px' } }}
                 margin="normal"
@@ -149,24 +200,13 @@ function FirstTry() {
                 }} label="new Name" placeholder="Enter new Name" value={name} color='success' onChange={(e) => setName(e.target.value)} />
             </CustomDialogContent>
             <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='success' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Confirm</ButtonStyle>
+              <ButtonStyle onClick={handleChangeName} variant="contained" color='success' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Confirm</ButtonStyle>
             </DialogActions>
           </DialogStyle>
 
           <DialogStyle open={openPasswordDialog} onClose={handleClose}>
             <DialogTitle>Change Password</DialogTitle>
             <CustomDialogContent dividers>
-              <TextField fullWidth
-                inputProps={{ style: { backgroundColor: 'white', borderRadius: '10px' } }}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '10px',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    padding: '12px',
-                  },
-                }} label="Old Password" type="password" placeholder="Old Password" value={oldPassword} color='success' onChange={(e) => setOldPassword(e.target.value)} />
               <TextField fullWidth
                 inputProps={{ style: { backgroundColor: 'white', borderRadius: '10px' } }}
                 margin="normal"
@@ -191,7 +231,7 @@ function FirstTry() {
                 }} label="Confirm Password" type="password" placeholder="Confirm Password" value={confirmPassword} color='success' onChange={(e) => setConfirmPassword(e.target.value)} />
             </CustomDialogContent>
             <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='success' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Confirm</ButtonStyle>
+              <ButtonStyle onClick={handleChangePassword} variant="contained" color='success' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Confirm</ButtonStyle>
             </DialogActions>
           </DialogStyle>
 
@@ -216,59 +256,7 @@ function FirstTry() {
                 }} label="You can tell us what's wrong" placeholder="You can tell us what's wrong" color='error' />
             </CustomDialogContent>
             <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='error' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Delete <SentimentVeryDissatisfiedIcon sx={{ ml: '2px' }} /></ButtonStyle>
-            </DialogActions>
-          </DialogStyle>
-
-          <DialogStyle open={openDeleteDialog} onClose={handleClose}>
-            <DialogTitle>Delete Child?</DialogTitle>
-            <CustomDialogContent dividers>
-              <TextField fullWidth
-                inputProps={{ style: { backgroundColor: 'white', borderRadius: '30px' } }}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '20px',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    padding: '12px',
-                  },
-                }} label="Child Name" placeholder="Which child ?" value={newId} color='error'  onChange={(e) => setNewId(e.target.value)} />
-            </CustomDialogContent>
-            <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='error' sx={{ borderRadius: "30px" , marginRight:'220px' }}>Delete</ButtonStyle>
-            </DialogActions>
-          </DialogStyle>
-
-          <DialogStyle open={openChangeIdDialog} onClose={handleClose}>
-            <CustomDialogContent dividers>
-              <Typography variant="h4">Change PIN</Typography>
-             
-             
-              <TextField fullWidth
-                inputProps={{ style: { backgroundColor: 'white', borderRadius: '10px' } }}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '10px',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    padding: '12px',
-                  },
-                }} label="Enter new PIN" placeholder="Enter new PIN" value={newId} color='success' onChange={(e) => setNewId(e.target.value)} />
-            </CustomDialogContent>
-            <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='success' sx={{ borderRadius: "30px" , marginRight:'220px' }}>Confirm</ButtonStyle>
-            </DialogActions>
-          </DialogStyle>
-
-          <DialogStyle open={openContactDialog} onClose={handleClose}>
-            <DialogTitle>Report Video</DialogTitle>
-            <CustomDialogContent dividers>
-              <Typography color={'white'} variant='h6'>Your feedback matters. We will investigate the reported video issue to ensure the best experience for you. Thank you for your understanding and patience.</Typography>
-            </CustomDialogContent>
-            <DialogActions>
-              <ButtonStyle onClick={handleClose} variant="contained" color='error' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Report</ButtonStyle>
+              <ButtonStyle onClick={handleDeleteAccount} variant="contained" color='error' sx={{ borderRadius: "10px" , marginRight:'220px' }}>Delete <SentimentVeryDissatisfiedIcon sx={{ ml: '2px' }} /></ButtonStyle>
             </DialogActions>
           </DialogStyle>
 

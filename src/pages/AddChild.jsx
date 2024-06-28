@@ -107,7 +107,7 @@ const FormWrapper = styled.div`
     const handleSubmit = async(prefs, gender, name, birthdate, PIN, imageURL) => {
         const placeholderImage = 'https://firebasestorage.googleapis.com/v0/b/the-eye-66e7b.appspot.com/o/App%20Assets%2Fprofile_placeholder.png?alt=media&token=8df99a81-51ab-488b-b0e6-335069e161c9';
 
-        if (PIN.length !== 4  && isNaN(PIN)) {
+        if (PIN.length !== 4 || isNaN(PIN)) {
             alert('PIN must be 4 numbers');
             return;
         }
@@ -206,7 +206,7 @@ const FormWrapper = styled.div`
             <div style={{paddingRight:'20px', margin:'0'}}>
                 <Input type="text" placeholder="Child's Name" onChange={(e)=>setName(e.target.value)}/>
                 <Input type="date" placeholder="Birth Date" onChange={(e)=>setDate(e.target.value)}/>
-                <Input type="password" max={4} placeholder="PIN" title="PIN must be 4 numbers" onChange={(e)=>setPIN(e.target.value)} />
+                <Input type="password" maxLength="4" placeholder="PIN" title="PIN must be 4 numbers" onChange={(e)=>setPIN(e.target.value)} />
             </div>
 
             <ContentSelection>
