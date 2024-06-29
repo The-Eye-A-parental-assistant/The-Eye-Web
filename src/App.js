@@ -64,15 +64,12 @@ function App() {
 
           <Route path="/videos" element={<Home/>} />
           <Route path="/addchild" element={<AddChild/>} />
-          <Route path="/upload" element={<Uppage/>} />
           
           <Route path="/history" element={<History/>} />
           <Route path="/childhistory/:id" element={<ChildHistory/>} />
           <Route path="/likedvids" element={<LikedVids/>} />
           <Route path="/dislikedvids" element={<DislikedVids/>} />
           <Route path="/saved" element={<SavedVids/>} />
-
-          <Route path="/addchild" element={<AddChild/>} />
 
           <Route path="/creatorchannel-CH/:id" element={<CreatorChannelCHILD/>} />
           <Route path="/creatorchannel-CR/:id" element={<CreatorChannelCREATOR/>} />
