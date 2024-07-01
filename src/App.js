@@ -17,6 +17,7 @@ import SavedVids from './pages/SavedVids';
 import CreatorsCREATOR from './pages/Creators_creator';
 import SettingsCreator from './pages/CREATOR_settings';
 import SettingsParent from './pages/PARENT_settings'; 
+import ContactSupport from './pages/ContactSupport';
 
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
@@ -78,7 +79,7 @@ function App() {
           <Route path="/creators-CR" element={<CreatorsCREATOR/>} />
 
           <Route path="/upload" element={<Uppage/>} />
-          <Route path="/support" element={<Uppage/>} /> //TODO
+          <Route path="/support" element={<ContactSupport/>} /> 
           
         
         </Routes>
