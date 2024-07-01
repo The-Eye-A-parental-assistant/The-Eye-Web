@@ -13,6 +13,8 @@ const Container2 = styled.div`
   display: flex;
   padding-top: 60px;
   padding-left: 20px;
+background-image: url("https://www.transparenttextures.com/patterns/robots.png");
+    height: 100vh;
 `;
 
 const Main = styled.div`
@@ -24,6 +26,7 @@ const Content = styled(Box)`
   margin-left: -80%; 
   margin-top: -42.5%; /* Assuming theme.spacing(-18) equals -144px */
   text-align: center;
+  
 `;
 
 const VideoCard = ({ videoid, image, title, description, date }) => {

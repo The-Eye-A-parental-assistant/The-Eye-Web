@@ -13,6 +13,9 @@ const Container2 = styled.div`
   display: flex;
   padding-top: 60px;
   padding-left: 20px;
+background-image: url("https://www.transparenttextures.com/patterns/robots.png");
+    height: 100vh;
+
 `;
 
 const Main = styled.div`
