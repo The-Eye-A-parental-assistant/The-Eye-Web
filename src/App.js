@@ -18,8 +18,12 @@ import CreatorsCREATOR from './pages/Creators_creator';
 import SettingsCreator from './pages/CREATOR_settings';
 import SettingsParent from './pages/PARENT_settings'; 
 import ContactSupport from './pages/ContactSupport';
+import  Intro from './pages/Intro';
+import Slider from './pages/Slider';
 
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+
 
 
 
@@ -38,7 +42,16 @@ const Wrapper = styled.div`
 
 `;
 
+
+
 function App() {
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowIntro(false), 13000); 
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <Container>
       <BrowserRouter>
@@ -51,7 +64,7 @@ function App() {
           
 
         <Routes>
-          <Route path="/" element={<AuthPage/>} />
+        <Route path="/" element={showIntro ? <Intro /> : <Slider />} />
           <Route path="/parent" element={<Graphs/>} />
           <Route path="video/:id" element={<Video/>} />
           <Route path="/login" element={<AuthPage/>} />

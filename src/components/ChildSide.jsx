@@ -287,7 +287,7 @@ export default function MiniDrawer() {
     <ListItem key='Home' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
-                minHeight: 83,
+                minHeight: 100,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
             }}
@@ -310,7 +310,7 @@ export default function MiniDrawer() {
     <ListItem key='History' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
-                minHeight: 83,
+                minHeight: 100,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
             }}
@@ -334,7 +334,7 @@ export default function MiniDrawer() {
     <ListItem key='Liked videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
-                minHeight: 83,
+                minHeight: 100,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
             }}
@@ -358,7 +358,7 @@ export default function MiniDrawer() {
     <ListItem key='Disliked videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
-                minHeight: 83,
+                minHeight: 100,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
             }}
@@ -382,7 +382,7 @@ export default function MiniDrawer() {
         <ListItem key='Saved videos' disablePadding sx={{ display: 'block' }}>
         <ListItemButton
             sx={{
-                minHeight: 83,
+                minHeight: 100,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
             }}
@@ -417,7 +417,7 @@ export default function MiniDrawer() {
                             
                             <ListItemButton
                                 sx={{
-                                    minHeight: 85,
+                                    minHeight: 105,
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
@@ -439,30 +439,6 @@ export default function MiniDrawer() {
                 </List>
               
                 <Divider />
-                <List sx={{ backgroundColor: '#8ED197' }} className='flex-grow-1'>
-                    {['Settings'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 88,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {text === 'Settings' && <SettingsIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
                
                 
               
