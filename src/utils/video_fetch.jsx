@@ -5,7 +5,9 @@ import generatePrefsOptions from './generatePrefsOptions';
 
 
 export async function video_fetch(setVideos, prefs, url = ""){
-    const queryOptions = generatePrefsOptions(prefs);
+    let queryOptions = generatePrefsOptions(prefs);
+    if (queryOptions.length > 30)
+        queryOptions.length = 30;
 
     var newvideos = [];
 

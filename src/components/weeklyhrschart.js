@@ -9,6 +9,9 @@ import adaptorScreenTime from '../utils/adaptorScreenTime';
 import adaptorFlags from '../utils/adaptorFlags';
 import updateChild from '../utils/updateChild';
 import adaptorDatabaseFlags from '../utils/adaptorDatabaseFlags';
+import { db } from '../utils/firebaseinit';
+import { doc, deleteDoc, arrayRemove } from 'firebase/firestore';
+import Cookies from 'js-cookie';
 
 import styled from 'styled-components';
 const Wrapper = styled.div`
@@ -112,6 +115,15 @@ const Graphcontainer = styled.div`
       updateChild(child.id, {prefs: adaptorDatabaseFlags({...allowedContent, [content]: !allowedContent[content]})});
   };
 
+  const handleDeleteChild = () => {
+    const prommise1 = updateChild(Cookies.get('token'), {children: arrayRemove(child.id)});
+    const prommise2 = deleteDoc(doc(db, 'users', child.id));
+    
+    Promise.all([prommise1, prommise2]).then(() => {
+      window.location.reload();
+    });
+  }
+
   
   return (
     
@@ -144,7 +156,7 @@ const Graphcontainer = styled.div`
                         Change PIN
             </ChangePinButton>
 
-            <DeleteAccountButton>
+            <DeleteAccountButton onClick={handleDeleteChild}>
                         <DeleteIcon style={{ fontSize: 'small' }}/>
                          Delete Account
             </DeleteAccountButton>
