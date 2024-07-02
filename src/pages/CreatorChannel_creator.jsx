@@ -20,13 +20,28 @@ const Main = styled.div`
   flex: 7;
 `;
 const CustomAvatar = styled(Avatar)`
-  width: 15% !important; /* Increase size, adjust percentage as needed */
-  height: 15% !important; /* Increase size, adjust percentage as needed */
+    width: 200px !important; 
+  height: 200px !important;
   border: 4px solid white;
-  border-radius: 50%; /* Ensure it's perfectly circular */
-  margin-top: -150px; 
+  border-radius: 50%;
+  margin-top: -110px; 
+  margin-bottom:10px;
   margin-left: 56px; 
-margin-bottom: 30px;
+
+  @media (max-width: 1200px) {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  @media (max-width: 900px) {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  @media (max-width: 600px) {
+    width: 100px !important;
+    height: 100px !important;
+  }
 `;
 
 const ProfileCard = styled(Box)`
@@ -50,6 +65,7 @@ const Header = styled(Box)`
   background-size: 400% 400%;
   animation: gradient 8s ease infinite;
   height: 200px; /* Assuming theme.spacing(30) equals 240px */
+  
 `;
 
 const Content = styled(Box)`
@@ -57,6 +73,7 @@ const Content = styled(Box)`
   margin-left: -40%; /* Assuming theme.spacing(-99) equals -792px */
   margin-top: -8%; /* Assuming theme.spacing(-18) equals -144px */
   text-align: center;
+
 `;
 
 const VideoCard = ({ videoid, image, title, description }) => {
@@ -110,7 +127,7 @@ const App = () => {
                 <ProfileCard>
                 <Header />
                 <CustomAvatar src={ creator ? creator.imageURL : "" } />
-                    <Content style={{padding: "20px 0"}}>
+                    <Content style={{padding: "30px 0"}}>
                         <Typography variant="h5" component="div" sx={{ fontWeight: 'bold',fontFamily:'cursive' }}> {creator ? creator.name : ""} </Typography>
                         <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 'bold',fontFamily:'cursive' }}> {creator ? creator.videos.length : 0 } videos </Typography>
                     </Content>

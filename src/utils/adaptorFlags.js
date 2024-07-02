@@ -1,12 +1,10 @@
 export default function adaptorFlags(flags) {
     const res = {
-        nudity: false,
-        violence: false,
-        weapons: false,
-        LGBTQ: false,
-        disgusting: false,
         sexual: false,
-        blood: false,
+        violence: false,
+        disgusting: false,
+        scary: false,
+        injury: false,
     };
     for (const flag of flags) {
         res[flag] = true;

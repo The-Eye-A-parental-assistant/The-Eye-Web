@@ -75,7 +75,7 @@ const FormWrapper = styled.div`
     const ContentButtons = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     justify-content: center;
     `;
 
@@ -158,13 +158,11 @@ const FormWrapper = styled.div`
         const [PIN, setPIN] = useState('');
         const [imageURL, setImageURL] = useState(undefined);
         const [allowedContent, setAllowedContent] = useState({
-            Nudity: false,
-            Violence: false,
-            Weapons: false,
-            LGBTQ: false,
-            Disgusting: false,
-            Sexual: false,
-            Blood: false,
+            violence: false,
+            scary: false,
+            disgusting: false,
+            sexual: false,
+            injury: false,
         });
 
     const handleContentChange = (content) => {

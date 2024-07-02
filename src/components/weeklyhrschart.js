@@ -61,7 +61,7 @@ const Graphcontainer = styled.div`
     justify-content: center;
     gap: 10px;
     margin-top: 5px;
-    padding-left: 150px;
+    padding-left: 250px;
   `;
 
 
@@ -82,7 +82,7 @@ const Graphcontainer = styled.div`
   const ContentButtons = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
     justify-content: center;
     padding-left: 50px;
     `;
@@ -109,7 +109,7 @@ const Graphcontainer = styled.div`
           [content]: !allowedContent[content],
       });
       
-      updateChild(child.id, {screentime: adaptorDatabaseFlags({...allowedContent, [content]: !allowedContent[content]})});
+      updateChild(child.id, {prefs: adaptorDatabaseFlags({...allowedContent, [content]: !allowedContent[content]})});
   };
 
   
