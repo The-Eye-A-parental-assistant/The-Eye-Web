@@ -14,7 +14,7 @@ const Container2 = styled.div`
   padding-top: 60px;
   padding-left: 20px;
 background-image: url("https://www.transparenttextures.com/patterns/robots.png");
-    height: 100vh;
+    height: 100%;
 `;
 
 const Main = styled.div`

@@ -10,6 +10,9 @@ import updateChild from '../utils/updateChild'
 import { Timestamp, arrayUnion, arrayRemove } from "firebase/firestore";
 import { Single_user_fetch } from "../utils/Single_user_fetch";
 import incrementViews from "../utils/incrementViews";
+import Cookie from 'js-cookie'
+import CreatorSide from "../components/CreatorSide";
+import ParentNav from '../components/ParentNav';
 
 
 //msh ma3mol
@@ -230,7 +233,12 @@ const Video = () => {
   return (
     <Container2>
       {/* <Menu /> */}
-      <ChildSide/>
+
+      {
+        Cookie.get('role') == 'creator'? <CreatorSide/> : 
+          sessionStorage.getItem('child') ? <ChildSide/> :
+            <ParentNav/>
+      }
       <Main>
       {/* <Navbar/> */}
   <Container>
